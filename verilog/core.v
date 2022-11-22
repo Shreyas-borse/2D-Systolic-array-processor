@@ -71,24 +71,6 @@ assign mux_OP_addr = dut_cl_sel?  dut_OP_add: core_OP_addr;
 assign mux_OP_cen  = dut_cl_sel?  dut_OP_cen: core_OP_cen;
 assign mux_OP_wen  = dut_cl_sel?  dut_OP_wen: core_OP_wen;
 
-corelet #(.row(row), .col(col)) corelet_inst1
-(
-             .clk(clk),
-             .reset(reset),
-            
-             .seq_begin(seq_begin), 
-             .seq_done(seq_done),
-            
-             .AW_q(AW_q),
-             .AW_addr(core_AW_addr),
-             .AW_cen(core_AW_cen),
-             .AW_wen(core_AW_wen), 
-             .OP_q(dut_OP_q),
-             .OP_d(core_OP_d),
-             .OP_addr(core_OP_addr),
-             .OP_cen(core_OP_cen),
-             .OP_wen(core_OP_wen),
-);
 
 AW_sram_108x32 u_sram_inst1(
     .CLK(clk),
@@ -112,4 +94,23 @@ OP_sram_340x128 u_sram_inst2(
 
 );
 
+corelet #(.row(row), .col(col)) corelet_inst1
+(
+             .clk(clk),
+             .reset(reset),
+            
+             .seq_begin(seq_begin), 
+             .seq_done(seq_done),
+            
+             .AW_q(AW_q),
+             .AW_addr(core_AW_addr),
+             .AW_cen(core_AW_cen),
+             .AW_wen(core_AW_wen), 
+             .OP_q(dut_OP_q),
+             .OP_d(core_OP_d),
+             .OP_addr(core_OP_addr),
+             .OP_cen(core_OP_cen),
+             .OP_wen(core_OP_wen),
+);
 
+endmodule

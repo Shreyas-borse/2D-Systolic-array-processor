@@ -1,0 +1,265 @@
+module corelet 
+(
+	input clk,
+	input reset,
+    
+    input seq_begin, 
+    output seq_done,
+
+// SRAM interface for Activations and Weights (ie AW) to FSM
+    input [31:0] AW_q, //from sram to lo
+    output [6:0] AW_addr,
+    output AW_cen,
+    output AW_wen,
+
+// SRAM interface for PMEM and output_final (ie OP) TO FSM
+    input [127:0] OP_q,
+    output [127:0] OP_d,
+    output [8:0] OP_addr,
+    output OP_cen,
+    output OP_wen
+);
+
+parameter row = 8;
+parameter col = 8;
+parameter bw = 4;
+parameter psum_bw = 16;
+
+reg [psum_bw*col -1 :0] sfu_in;
+reg [psum_bw*col -1 :0] sfu_out;
+
+wire [31:0] l0_to_array;
+wire l0_rd;
+wire l0_wr;
+wire l0_full;
+wire l0_ready;
+
+
+l0 #( .bw(bw), .row(row)) u_l0_inst1 (
+        .clk(clk),
+        .in(AW_q),
+        .out(l0_to_array),
+        .rd(l0_rd),
+        .wr(l0_wr),
+        .o_full(l0_full),
+        .reset(reset),
+        .o_ready(l0_ready)
+        );
+
+wire [col*bw -1 : 0] ofifo_in;
+wire [1:0] inst_w;
+wire [col -1 : 0] array_valid_out;
+
+
+mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1 
+(
+  .clk(clk),
+  .reset(reset),
+  .out_s(ofifo_in),
+  .in_w(l0_to_array), // inst[1]:execute, inst[0]: kernel loading
+  .inst_w(inst_w),
+  .in_n(0),
+  .valid(array_valid_out) //connect to ofifo valid signal
+);
+
+//wire [psum_bw*col - 1: 0] pmem_in;
+//wire ofifo_rd;
+//wire ofifo_wr[col-1 : 0];
+//wire ofifo_full;
+//wire ofifo_empty;
+//wire ofifo_valid;
+
+
+//ofifo #() u_ofifo_inst1(
+//        .clk(clk),
+//        .in(ofifo_in),
+//        .out(pmem_in),
+//        .rd(ofifo_rd),
+//        .wr(ofifo_wr),
+//        .o_full(ofifo_full),
+//        .reset(reset),
+//        .o_ready(ofifo_ready),
+//        .o_valid(ofifo_valid)
+//);
+
+//wire [] pmem_to_sfu_in; // from pmem to sfu unit
+//wire [] sfu_out; // goes to OP_sram output 
+//wire [] sfu_valid;
+
+
+//sfu #(.col(col)) u_sfu_inst1(
+//        .clk(clk),
+//        .reset(reset),
+//        .sfu_in(pmem_to_sfu_in),
+//        .sfu_out(sfu_out),
+//        .sfu_valid(sfu_valid)
+//);
+
+///FSM for controlling data flow//
+
+//typedef enum logic {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
+typedef enum {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
+state_coding_t present_state, next_state;
+
+logic [6:0] count, count_next;
+logic [3:0] kij_count, kij_count_next;
+//logic [5:0] act_count, act_count_next;
+
+
+always @(posedge clk or posedge reset) begin
+    if(reset) begin
+        present_state   <= IDLE;
+        count           <= 0;
+        kij_count       <= 0;
+        l0_wr           <= 0;
+        l0_rd           <= 0;
+        inst_w          <= 0;
+    end
+    else begin
+        present_state   <= next_state   ;
+        count           <= count_next        ;
+        kij_count       <= kij_count_next    ;
+        l0_wr           <= l0_wr_next        ;
+        l0_rd           <= l0_rd_next        ;
+        inst_w          <= inst_w_next       ;
+    end
+end
+
+always@ * begin
+    next_state      =   present_state  ;
+    count_next      =   count          ;
+    kij_count_next  =   kij_count      ;
+    l0_wr_next      =   l0_wr          ;
+    l0_rd_next      =   l0_rd          ;
+    inst_w_next     =   inst_w         ;
+    weight_reset    =   0;
+    case(present_state) begin
+        IDLE:
+            if(seq_begin) begin
+                next_state  =   W_TO_L0;
+                count_next  =   0;
+                kij_count_next = 0;
+            end
+
+        W_TO_L0:
+            if (count > 7) begin
+                next_state = W_TO_ARRAY;
+                count_next = 0;
+                l0_wr_next = 0;
+            end
+            else begin
+                next_state = present_state;
+                count_next = count + 1;
+                l0_wr_next = 1;
+            end
+
+        W_TO_ARRAY:
+            if(count>'d23)
+            begin
+                next_state      = A_TO_L0;
+                count_next      = 'd0;
+                inst_w_next   = 2'b00;
+                l0_rd_next       = 1'b0;
+            end
+            else if(count>'d7)
+            begin
+                next_state      = present_state;
+                count_next      = count+'d1;
+                inst_w_next   = 2'b00;
+                l0_rd_next       = 1'b0;
+            end
+            else
+            begin
+                next_state      = present_state;
+                count_next      = count+'d1;
+                inst_w_next   = 2'b01;
+                l0_rd_next       = 1'b1;
+            end
+
+        A_TO_L0:     
+            if(count> 35) begin
+                next_state      = A_TO_ARRAY;
+                count_next    = 0;
+                l0_wr_next      = 0;
+            end
+            else begin
+                next_state      = present_state;
+                count_next    = count+1;
+                l0_wr_next      = 1;
+            end
+
+        A_TO_ARRAY:
+            if(count>57) begin   // +2 over computation for reset of the state
+				next_state      = kij=='d8 ? SFU_COMPUTE : W_TO_L0;
+				count_next 	= 'd0;
+				weight_reset		= 'b0;
+                kij_next        = kij=='d8 ? 'd8 : kij+'d1;
+            end
+            else if(count>56) begin     //Asserting reset to Mac_array for 1 cycle to clear the weights
+				next_state 		= present_state;
+				count_next 	= count + 'd1;
+				weight_reset 		= 'b1;
+            end
+            else if(count>55) begin// 36 + 8 + 8 + 1 + 1 + buffer(2)
+            begin
+                next_state      = present_state;
+                count_next    = 'h0;
+                inst_w_next   = 2'b00;
+                l0_rd_next       = 1'b0;
+            end
+            else if(count>'d35)  
+            begin
+                next_state      = present_state;
+                count_next    = count+1;
+                inst_w_next   = 2'b00;
+                l0_rd_next       = 1'b0;
+            end
+            else
+            begin
+                next_state      = present_state;
+                count_next    = count+'d1;
+                inst_w_next   = 2'b10;
+                l0_rd_next       = 1'b1;
+            end
+
+        SFU_COMPUTE:
+            if(count>143) begin
+                next_state      = OUT_SRAM_FILL;
+                count_next    = 0;
+            end
+            else begin
+                next_state      = present_state;
+                count         = count + 1;
+            end
+
+        OUT_SRAM_FILL:
+            if(count>15) begin
+                next_state      = IDLE;
+                count_next    = 0;
+            end
+            else begin
+                next_state = present_state;
+                count = count + 1;
+            end
+    endcase
+end
+//
+//logic [6:0] ACT_ADDR;
+//logic [6:0] WEIGHT_ADDR;
+//logic [6:0] AW_ADDR_MUX;
+//
+//always @*
+//begin
+//    ACT_ADDR = counter ; //lut_ptr + counter + {counter[3:2],1'b0};
+//    WEIGHT_ADDR = {kij,3'b0} + counter;
+//    AW_ADDR_MUX = (state==ACT_L0) ? ACT_ADDR + 72 : WEIGHT_ADDR;
+//end
+//
+// // I_Q     //input   [31:0]
+// // I_D     //output  [31:0]
+//assign I_ADDR    = AW_ADDR_MUX;    //output  [6:0] 
+//assign I_CEN     = !write_next;    //output        
+//assign I_WEN     = 1'b1;           //output       
+//
+
+endmodule
