@@ -25,7 +25,7 @@ wire [bw-1:0] out_e;
 wire [psum_bw-1:0] mac_out;
 
 mac #(.bw(bw), .psum_bw(psum_bw)) mac_instance (
-        .clk(clk)
+        .clk(clk),
         .a(a_q), 
         .b(b_q),
         .c(c_q),

@@ -14,7 +14,7 @@ module mac_row (clk, out_s, in_w, in_n, valid, inst_w, reset);
   input  [psum_bw*col-1:0] in_n;
 
   wire  [(col+1)*bw-1:0] temp;
-  reg [2*col-1:0] valid_temp;
+  wire [2*col-1:0] valid_temp;
   
   assign temp[bw-1:0]   = in_w;
   genvar i;
