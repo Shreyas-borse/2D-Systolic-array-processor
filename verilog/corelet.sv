@@ -218,10 +218,10 @@ always@ * begin
         ACT_L0_TO_ARRAY:
             if(count>57)
             begin   // +2 over computation for reset of the state
-				next_state      = kij== 8 ? SFU_COMPUTE : W_TO_L0;
+				next_state      = kij_count== 8 ? SFU_COMPUTE : W_SRAM_TO_L0;
 				count_next 	    =  0;
 				weight_reset	= 0;
-                kij_next        = kij== 8 ? 8 : kij + 1;
+                kij_count_next        = kij_count== 8 ? 8 : kij_count + 1;
             end
             else if(count>56)
             begin     //Asserting reset to Mac_array for 1 cycle to clear the weights
