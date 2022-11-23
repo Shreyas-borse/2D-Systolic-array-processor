@@ -62,25 +62,25 @@ mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1
   .valid(array_valid_out) //connect to ofifo valid signal
 );
 
-//wire [psum_bw*col - 1: 0] pmem_in;
-//wire ofifo_rd;
-//wire ofifo_wr[col-1 : 0];
-//wire ofifo_full;
-//wire ofifo_empty;
-//wire ofifo_valid;
+wire [psum_bw*col - 1: 0] pmem_in;
+wire ofifo_rd;
+wire ofifo_wr[col-1 : 0];
+wire ofifo_full;
+wire ofifo_empty;
+wire ofifo_valid;
 
 
-//ofifo #() u_ofifo_inst1(
-//        .clk(clk),
-//        .in(ofifo_in),
-//        .out(pmem_in),
-//        .rd(ofifo_rd),
-//        .wr(ofifo_wr),
-//        .o_full(ofifo_full),
-//        .reset(reset),
-//        .o_ready(ofifo_ready),
-//        .o_valid(ofifo_valid)
-//);
+ofifo #(.col(col), .bw(bw)) u_ofifo_inst1(
+        .clk(clk),
+        .in(ofifo_in),
+        .out(pmem_in),
+        .rd(ofifo_rd),
+        .wr(ofifo_wr),
+        .o_full(ofifo_full),
+        .reset(reset),
+        .o_ready(ofifo_ready),
+        .o_valid(ofifo_valid)
+);
 
 //wire [] pmem_to_sfu_in; // from pmem to sfu unit
 //wire [] sfu_out; // goes to OP_sram output 
@@ -98,13 +98,22 @@ mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1
 ///FSM for controlling data flow//
 
 //typedef enum logic {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
-typedef enum {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
+typedef enum {IDLE, W_SRAM_TO_L0, W_L0_TO_ARRAY, ACT_SRAM_TO_L0, ACT_L0_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL} state_coding_t;
 state_coding_t present_state, next_state;
 
 logic [6:0] count, count_next;
 logic [3:0] kij_count, kij_count_next;
 //logic [5:0] act_count, act_count_next;
+logic     l0_wr_next;
+logic     l0_rd_next;
 
+
+always @(posedge clk or posedge reset) begin
+    if(reset) begin
+        seq_done <=0;
+    else 
+        seq_don
+        
 
 always @(posedge clk or posedge reset) begin
     if(reset) begin
@@ -116,7 +125,7 @@ always @(posedge clk or posedge reset) begin
         inst_w          <= 0;
     end
     else begin
-        present_state   <= next_state   ;
+        present_state   <= next_state        ;
         count           <= count_next        ;
         kij_count       <= kij_count_next    ;
         l0_wr           <= l0_wr_next        ;
@@ -136,14 +145,14 @@ always@ * begin
     case(present_state) begin
         IDLE:
             if(seq_begin) begin
-                next_state  =   W_TO_L0;
+                next_state  =   W_SRAM_TO_L0;
                 count_next  =   0;
                 kij_count_next = 0;
             end
 
-        W_TO_L0:
+        W_SRAM_TO_L0:
             if (count > 7) begin
-                next_state = W_TO_ARRAY;
+                next_state = W_L0_TO_ARRAY;
                 count_next = 0;
                 l0_wr_next = 0;
             end
@@ -153,33 +162,33 @@ always@ * begin
                 l0_wr_next = 1;
             end
 
-        W_TO_ARRAY:
-            if(count>'d23)
+        W_L0_TO_ARRAY:
+            if(count > 23)
             begin
-                next_state      = A_TO_L0;
-                count_next      = 'd0;
-                inst_w_next   = 2'b00;
-                l0_rd_next       = 1'b0;
+                next_state      = ACT_L0_TO_ARRAY;
+                count_next      = 0;
+                inst_w_next     = 0;
+                l0_rd_next      = 0;
             end
-            else if(count>'d7)
+            else if(count > 7)
             begin
                 next_state      = present_state;
-                count_next      = count+'d1;
-                inst_w_next   = 2'b00;
-                l0_rd_next       = 1'b0;
+                count_next      = count + 1;
+                inst_w_next     = 0;
+                l0_rd_next      = 0;
             end
             else
             begin
                 next_state      = present_state;
-                count_next      = count+'d1;
-                inst_w_next   = 2'b01;
-                l0_rd_next       = 1'b1;
+                count_next      = count + 1;
+                inst_w_next     = 1;
+                l0_rd_next      = 1;
             end
 
-        A_TO_L0:     
+        ACT_SRAM_TO_L0:     
             if(count> 35) begin
-                next_state      = A_TO_ARRAY;
-                count_next    = 0;
+                next_state      = ACT_L0_TO_ARRAY;
+                count_next      = 0;
                 l0_wr_next      = 0;
             end
             else begin
@@ -188,38 +197,38 @@ always@ * begin
                 l0_wr_next      = 1;
             end
 
-        A_TO_ARRAY:
+        ACT_L0_TO_ARRAY:
             if(count>57) begin   // +2 over computation for reset of the state
-				next_state      = kij=='d8 ? SFU_COMPUTE : W_TO_L0;
-				count_next 	= 'd0;
-				weight_reset		= 'b0;
-                kij_next        = kij=='d8 ? 'd8 : kij+'d1;
+				next_state      = kij== 8 ? SFU_COMPUTE : W_TO_L0;
+				count_next 	    =  0;
+				weight_reset	= 0;
+                kij_next        = kij== 8 ? 8 : kij + 1;
             end
             else if(count>56) begin     //Asserting reset to Mac_array for 1 cycle to clear the weights
 				next_state 		= present_state;
-				count_next 	= count + 'd1;
-				weight_reset 		= 'b1;
+				count_next 	= count + 1;
+				weight_reset 		= 1;
             end
             else if(count>55) begin// 36 + 8 + 8 + 1 + 1 + buffer(2)
             begin
-                next_state      = present_state;
-                count_next    = 'h0;
-                inst_w_next   = 2'b00;
-                l0_rd_next       = 1'b0;
+                next_state    = present_state;
+                count_next    = 0;
+                inst_w_next   = 0;
+                l0_rd_next    = 0;
             end
-            else if(count>'d35)  
+            else if(count> 35)  
             begin
-                next_state      = present_state;
+                next_state    = present_state;
                 count_next    = count+1;
-                inst_w_next   = 2'b00;
-                l0_rd_next       = 1'b0;
+                inst_w_next   = 0;
+                l0_rd_next    = 0;
             end
             else
             begin
                 next_state      = present_state;
-                count_next    = count+'d1;
-                inst_w_next   = 2'b10;
-                l0_rd_next       = 1'b1;
+                count_next      = count + 1;
+                inst_w_next     = 2;
+                l0_rd_next      = 1;
             end
 
         SFU_COMPUTE:
@@ -235,7 +244,7 @@ always@ * begin
         OUT_SRAM_FILL:
             if(count>15) begin
                 next_state      = IDLE;
-                count_next    = 0;
+                count_next      = 0;
             end
             else begin
                 next_state = present_state;
