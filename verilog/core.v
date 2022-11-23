@@ -79,19 +79,18 @@ parameter col = 8;
 
 
 assign mux_ACT_d    = dut_ACT_d;
-
 //assign mux_ACT_q = dut_cl_sel ? dut_ACT_q : core_ACT_q;
-assign mux_ACT_addr = dut_cl_sel?  dut_ACT_add: core_ACT_addr;
+assign mux_ACT_addr = dut_cl_sel?  dut_ACT_addr: core_ACT_addr;
 assign mux_ACT_cen  = dut_cl_sel?  dut_ACT_cen: core_ACT_cen;
 assign mux_ACT_wen  = dut_cl_sel?  dut_ACT_wen: core_ACT_wen;
 
 assign mux_W_d    = dut_W_d;
-assign mux_W_addr = dut_cl_sel?  dut_W_add: core_W_addr;
+assign mux_W_addr = dut_cl_sel?  dut_W_addr: core_W_addr;
 assign mux_W_cen  = dut_cl_sel?  dut_W_cen: core_W_cen;
 assign mux_W_wen  = dut_cl_sel?  dut_W_wen: core_W_wen;
 
 assign mux_OP_d    = dut_cl_sel? dut_OP_d: core_OP_d;                       
-assign mux_OP_addr = dut_cl_sel?  dut_OP_add: core_OP_addr;
+assign mux_OP_addr = dut_cl_sel?  dut_OP_addr: core_OP_addr;
 assign mux_OP_cen  = dut_cl_sel?  dut_OP_cen: core_OP_cen;
 assign mux_OP_wen  = dut_cl_sel?  dut_OP_wen: core_OP_wen;
 

@@ -87,6 +87,9 @@ ofifo #(.col(col), .bw(bw)) u_ofifo_inst1(
         .o_valid(ofifo_valid)
 );
 
+assign OP_d = pmem_in;
+
+
 //wire [] pmem_to_sfu_in; // from pmem to sfu unit
 //wire [] sfu_out; // goes to OP_sram output 
 //wire [] sfu_valid;
@@ -112,7 +115,7 @@ logic [3:0] kij_count, kij_count_next;
 logic     l0_wr_next;
 logic     l0_rd_next;
 
-
+// sequence complete from FSM to TB
 always @(posedge clk or posedge reset) begin
     if(reset)
         seq_done <=0;
@@ -260,23 +263,7 @@ always@ * begin
             end
     endcase
 end
-//
-//logic [6:0] ACT_ADDR;
-//logic [6:0] WEIGHT_ADDR;
-//logic [6:0] AW_ADDR_MUX;
-//
-//always @*
-//begin
-//    ACT_ADDR = counter ; //lut_ptr + counter + {counter[3:2],1'b0};
-//    WEIGHT_ADDR = {kij,3'b0} + counter;
-//    AW_ADDR_MUX = (state==ACT_L0) ? ACT_ADDR + 72 : WEIGHT_ADDR;
-//end
-//
-// // I_Q     //input   [31:0]
-// // I_D     //output  [31:0]
-//assign I_ADDR    = AW_ADDR_MUX;    //output  [6:0] 
-//assign I_CEN     = !write_next;    //output        
-//assign I_WEN     = 1'b1;           //output       
-//
+    
+
 
 endmodule
