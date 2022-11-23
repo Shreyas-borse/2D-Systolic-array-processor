@@ -4,7 +4,7 @@ module corelet
 	input reset,
     
     input seq_begin, 
-    output seq_done,
+    output reg seq_done,
 
 // SRAM interface for Activations and Weights (ie AW) to FSM
     input [31:0] ACT_q, //from sram to lo
@@ -52,10 +52,10 @@ l0 #( .bw(bw), .row(row)) u_l0_inst1 (
         .o_ready(l0_ready)
         );
 
-wire [col*bw -1 : 0] ofifo_in;
-wire [1:0] inst_w;
-wire [col -1 : 0] array_valid_out;
+logic [col*bw -1 : 0] ofifo_in;
+logic [col -1 : 0] array_valid_out;
 
+logic [1:0] inst_w;
 
 mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1 
 (
