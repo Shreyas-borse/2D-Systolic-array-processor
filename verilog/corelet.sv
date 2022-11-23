@@ -7,11 +7,14 @@ module corelet
     output seq_done,
 
 // SRAM interface for Activations and Weights (ie AW) to FSM
-    input [31:0] AW_q, //from sram to lo
-    output [6:0] AW_addr,
-    output AW_cen,
-    output AW_wen,
-
+    input [31:0] ACT_q, //from sram to lo
+    output [6:0] ACT_addr,
+    output ACT_cen,
+    output ACT_wen,
+    input [31:0] W_q, //from sram to lo
+    output [6:0] W_addr,
+    output W_cen,
+    output W_wen,
 // SRAM interface for PMEM and output_final (ie OP) TO FSM
     input [127:0] OP_q,
     output [127:0] OP_d,
@@ -28,12 +31,14 @@ parameter psum_bw = 16;
 reg [psum_bw*col -1 :0] sfu_in;
 reg [psum_bw*col -1 :0] sfu_out;
 
-wire [31:0] l0_to_array;
-wire l0_rd;
-wire l0_wr;
-wire l0_full;
-wire l0_ready;
+reg [31:0] l0_to_array;
+reg l0_rd;
+reg l0_wr;
+reg l0_full;
+reg l0_ready;
 
+reg [31:0] AW_q;
+assign AW_q = AW_mode ? W_q : ACT_q ;
 
 l0 #( .bw(bw), .row(row)) u_l0_inst1 (
         .clk(clk),
@@ -109,11 +114,11 @@ logic     l0_rd_next;
 
 
 always @(posedge clk or posedge reset) begin
-    if(reset) begin
+    if(reset)
         seq_done <=0;
     else 
-        seq_don
-        
+        seq_done <= (next_state == IDLE && OUT_SRAM_FILL);
+    end
 
 always @(posedge clk or posedge reset) begin
     if(reset) begin
@@ -152,11 +157,13 @@ always@ * begin
 
         W_SRAM_TO_L0:
             if (count > 7) begin
+                
                 next_state = W_L0_TO_ARRAY;
                 count_next = 0;
                 l0_wr_next = 0;
             end
             else begin
+                AW_mode    = 1;
                 next_state = present_state;
                 count_next = count + 1;
                 l0_wr_next = 1;
@@ -192,9 +199,10 @@ always@ * begin
                 l0_wr_next      = 0;
             end
             else begin
-                next_state      = present_state;
+                AW_mode       = 0;
+                next_state    = present_state;
                 count_next    = count+1;
-                l0_wr_next      = 1;
+                l0_wr_next    = 1;
             end
 
         ACT_L0_TO_ARRAY:
