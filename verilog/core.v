@@ -95,7 +95,7 @@ assign mux_OP_cen  = dut_cl_sel?  dut_OP_cen: core_OP_cen;
 assign mux_OP_wen  = dut_cl_sel?  dut_OP_wen: core_OP_wen;
 
 
-ACT_sram_108x32 u_sram_inst1(
+ACT_sram_36x32 u_sram_inst1(
     .CLK(clk),
     .D(mux_ACT_d),
     .Q(ACT_q),
@@ -104,7 +104,7 @@ ACT_sram_108x32 u_sram_inst1(
     .A(mux_ACT_addr)
     );
 
-W_sram_108x32 u_sram_inst2(
+W_sram_72x32 u_sram_inst2(
     .CLK(clk),
     .D(mux_W_d),
     .Q(W_q),

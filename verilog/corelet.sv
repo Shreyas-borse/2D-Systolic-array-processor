@@ -68,12 +68,12 @@ mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1
   .valid(array_valid_out) //connect to ofifo valid signal
 );
 
-wire [psum_bw*col - 1: 0] pmem_in;
-wire ofifo_rd;
-wire ofifo_wr[col-1 : 0];
-wire ofifo_full;
-wire ofifo_empty;
-wire ofifo_valid;
+logic [psum_bw*col - 1: 0] pmem_in;
+logic ofifo_rd;
+logic ofifo_wr[col-1 : 0];
+logic ofifo_full;
+logic ofifo_empty;
+logic ofifo_valid;
 
 
 ofifo #(.col(col), .bw(bw)) u_ofifo_inst1(

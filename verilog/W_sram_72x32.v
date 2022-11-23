@@ -1,6 +1,6 @@
 // Created by prof. Mingu Kang @VVIP Lab in UCSD ECE department
 // Please do not spread this code without permission 
-module AW_sram_108x32 (CLK, D, Q, CEN, WEN, A);
+module W_sram_72x32 (CLK, D, Q, CEN, WEN, A);
 
   input  CLK;
   input  WEN;
