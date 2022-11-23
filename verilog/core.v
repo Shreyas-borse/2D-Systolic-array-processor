@@ -31,7 +31,7 @@ module core
     input  [127:0] dut_OP_d,
     input  [8:0] dut_OP_addr,
     input  dut_OP_cen,
-    input  dut_OP_wen,
+    input  dut_OP_wen
 );
 
 parameter row = 8;
@@ -39,43 +39,43 @@ parameter col = 8;
 
 
 // from CORELET to mux for SRAMs 
-    wire [31:0] core_ACT_q,
-    wire [31:0] core_ACT_d,
-    wire  [6:0] core_ACT_addr,
-    wire        core_ACT_cen,
-    wire        core_ACT_wen,
+    wire [31:0] core_ACT_q;
+    wire [31:0] core_ACT_d;
+    wire  [6:0] core_ACT_addr;
+    wire        core_ACT_cen;
+    wire        core_ACT_wen;
     
-    wire [31:0] core_W_q,
-    wire [31:0] core_W_d,
-    wire  [6:0] core_W_addr,
-    wire        core_W_cen,
-    wire        core_W_wen,
+    wire [31:0] core_W_q;
+    wire [31:0] core_W_d;
+    wire  [6:0] core_W_addr;
+    wire        core_W_cen;
+    wire        core_W_wen;
 
 
-    wire  [127:0] core_OP_q,
-    wire  [127:0] core_OP_d,
-    wire  [8:0]   core_OP_addr,
-    wire          core_OP_cen,
-    wire          core_OP_wen,
+    wire  [127:0] core_OP_q;
+    wire  [127:0] core_OP_d;
+    wire  [8:0]   core_OP_addr;
+    wire          core_OP_cen;
+    wire          core_OP_wen;
 
 //  from mux to SRAMs 
-    wire [31:0] mux_ACT_q,
-    wire [31:0] mux_ACT_d,
-    wire  [6:0] mux_ACT_addr,
-    wire        mux_ACT_cen,
-    wire        mux_ACT_wen,
+    wire [31:0] mux_ACT_q;
+    wire [31:0] mux_ACT_d;
+    wire  [6:0] mux_ACT_addr;
+    wire        mux_ACT_cen;
+    wire        mux_ACT_wen;
 
-    wire [31:0] mux_W_q,
-    wire [31:0] mux_W_d,
-    wire  [6:0] mux_W_addr,
-    wire        mux_W_cen,
-    wire        mux_W_wen,
+    wire [31:0] mux_W_q;
+    wire [31:0] mux_W_d;
+    wire  [6:0] mux_W_addr;
+    wire        mux_W_cen;
+    wire        mux_W_wen;
 
-    wire  [127:0] mux_OP_q,
-    wire  [127:0] mux_OP_d,
-    wire  [8:0]   mux_OP_addr,
-    wire          mux_OP_cen,
-    wire          mux_OP_wen,
+    wire  [127:0] mux_OP_q;
+    wire  [127:0] mux_OP_d;
+    wire  [8:0]   mux_OP_addr;
+    wire          mux_OP_cen;
+    wire          mux_OP_wen;
 
 
 assign mux_ACT_d    = dut_ACT_d;
@@ -122,7 +122,6 @@ OP_sram_340x128 u_sram_inst3(
     .A(mux_OP_addr)
     );
 
-);
 
 corelet #(.row(row), .col(col)) corelet_inst1
 (
@@ -144,7 +143,7 @@ corelet #(.row(row), .col(col)) corelet_inst1
              .OP_d(core_OP_d),
              .OP_addr(core_OP_addr),
              .OP_cen(core_OP_cen),
-             .OP_wen(core_OP_wen),
+             .OP_wen(core_OP_wen)
 );
 
 endmodule

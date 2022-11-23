@@ -37,7 +37,8 @@ reg l0_wr;
 reg l0_full;
 reg l0_ready;
 
-reg [31:0] AW_q;
+logic [31:0] AW_q;
+logic AW_mode;
 assign AW_q = AW_mode ? W_q : ACT_q ;
 
 l0 #( .bw(bw), .row(row)) u_l0_inst1 (
@@ -114,6 +115,8 @@ logic [3:0] kij_count, kij_count_next;
 //logic [5:0] act_count, act_count_next;
 logic     l0_wr_next;
 logic     l0_rd_next;
+logic    inst_w_next; 
+logic weight_reset;
 
 // sequence complete from FSM to TB
 always @(posedge clk or posedge reset) begin
@@ -150,22 +153,24 @@ always@ * begin
     l0_rd_next      =   l0_rd          ;
     inst_w_next     =   inst_w         ;
     weight_reset    =   0;
-    case(present_state) begin
+    case(present_state)
         IDLE:
-            if(seq_begin) begin
+            if(seq_begin) 
+            begin
                 next_state  =   W_SRAM_TO_L0;
                 count_next  =   0;
                 kij_count_next = 0;
             end
 
         W_SRAM_TO_L0:
-            if (count > 7) begin
-                
+            if (count > 7) 
+            begin
                 next_state = W_L0_TO_ARRAY;
                 count_next = 0;
                 l0_wr_next = 0;
             end
-            else begin
+            else
+            begin
                 AW_mode    = 1;
                 next_state = present_state;
                 count_next = count + 1;
@@ -196,12 +201,14 @@ always@ * begin
             end
 
         ACT_SRAM_TO_L0:     
-            if(count> 35) begin
+            if(count> 35) 
+            begin
                 next_state      = ACT_L0_TO_ARRAY;
                 count_next      = 0;
                 l0_wr_next      = 0;
             end
-            else begin
+            else 
+            begin
                 AW_mode       = 0;
                 next_state    = present_state;
                 count_next    = count+1;
@@ -209,19 +216,21 @@ always@ * begin
             end
 
         ACT_L0_TO_ARRAY:
-            if(count>57) begin   // +2 over computation for reset of the state
+            if(count>57)
+            begin   // +2 over computation for reset of the state
 				next_state      = kij== 8 ? SFU_COMPUTE : W_TO_L0;
 				count_next 	    =  0;
 				weight_reset	= 0;
                 kij_next        = kij== 8 ? 8 : kij + 1;
             end
-            else if(count>56) begin     //Asserting reset to Mac_array for 1 cycle to clear the weights
+            else if(count>56)
+            begin     //Asserting reset to Mac_array for 1 cycle to clear the weights
 				next_state 		= present_state;
 				count_next 	= count + 1;
 				weight_reset 		= 1;
             end
-            else if(count>55) begin// 36 + 8 + 8 + 1 + 1 + buffer(2)
-            begin
+            else if(count>55)
+            begin// 36 + 8 + 8 + 1 + 1 + buffer(2)
                 next_state    = present_state;
                 count_next    = 0;
                 inst_w_next   = 0;
@@ -243,7 +252,8 @@ always@ * begin
             end
 
         SFU_COMPUTE:
-            if(count>143) begin
+            if(count>143) 
+            begin
                 next_state      = OUT_SRAM_FILL;
                 count_next    = 0;
             end
