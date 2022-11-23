@@ -52,7 +52,7 @@ l0 #( .bw(bw), .row(row)) u_l0_inst1 (
         .o_ready(l0_ready)
         );
 
-logic [col*bw -1 : 0] ofifo_in;
+logic [col*psum_bw -1 : 0] ofifo_in;
 logic [col -1 : 0] array_valid_out;
 
 logic [1:0] inst_w;
@@ -64,7 +64,7 @@ mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1
   .out_s(ofifo_in),
   .in_w(l0_to_array), // inst[1]:execute, inst[0]: kernel loading
   .inst_w(inst_w),
-  .in_n(0),
+  .in_n(128'b0),
   .valid(array_valid_out) //connect to ofifo valid signal
 );
 

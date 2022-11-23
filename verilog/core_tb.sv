@@ -22,7 +22,7 @@ logic           TB_W_WEN;
 
 logic   [127:0] TB_O_D;
 wire    [127:0] TB_O_Q;
-logic   [3:0]   TB_O_ADDR;
+logic   [8:0]   TB_O_ADDR;
 logic           TB_O_CEN;
 logic           TB_O_WEN;
 
