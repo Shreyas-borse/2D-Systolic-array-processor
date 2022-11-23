@@ -91,21 +91,6 @@ ofifo #(.col(col), .bw(bw)) u_ofifo_inst1(
 assign OP_d = pmem_in;
 
 
-//wire [] pmem_to_sfu_in; // from pmem to sfu unit
-//wire [] sfu_out; // goes to OP_sram output 
-//wire [] sfu_valid;
-
-
-//sfu #(.col(col)) u_sfu_inst1(
-//        .clk(clk),
-//        .reset(reset),
-//        .sfu_in(pmem_to_sfu_in),
-//        .sfu_out(sfu_out),
-//        .sfu_valid(sfu_valid)
-//);
-
-///FSM for controlling data flow//
-
 //typedef enum logic {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
 typedef enum {IDLE, W_SRAM_TO_L0, W_L0_TO_ARRAY, ACT_SRAM_TO_L0, ACT_L0_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL} state_coding_t;
 state_coding_t present_state, next_state;
