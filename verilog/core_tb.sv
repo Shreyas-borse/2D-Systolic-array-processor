@@ -82,15 +82,16 @@ begin
     w_scan_file = $fscanf(w_file,"%s", captured_data);
 
     #101 RESET = 0;
+
+    // ***********Loading Weights to W_SRAM************
     #10
+    TB_CL_SELECT = 1;
     TB_W_CEN = 0;
     TB_W_WEN = 0;
     TB_ACT_CEN = 1;
     TB_ACT_WEN = 1;
-
-    TB_CL_SELECT = 1;
-    TB_O_WEN = 1;
     TB_O_CEN = 1;
+    TB_O_WEN = 1;
 
     for (i=0; i<72 ; i=i+1)
     begin
@@ -102,9 +103,9 @@ begin
     #10
     TB_W_CEN = 1;
     TB_W_WEN = 1;
-    TB_CL_SELECT = 1;
-    TB_O_WEN = 1;
-    TB_O_CEN = 1;
+    
+    //***********Checking if W loads were correct or not**************
+
     for (i=0; i<72 ; i=i+1)
     begin
         #5
@@ -119,6 +120,9 @@ begin
             error = error+1;
         end
     end
+
+    TB_W_CEN = 1;
+    TB_W_WEN = 1;
     //Weight Load and Check ends
 
     //Activation Load and check begins
@@ -132,11 +136,9 @@ begin
 
     #101 RESET = 0;
     #10
+    TB_CL_SELECT = 1;
     TB_ACT_CEN = 0;
     TB_ACT_WEN = 0;
-    TB_CL_SELECT = 1;
-    TB_O_WEN = 1;
-    TB_O_CEN = 1;
 
     for (i=0; i<36 ; i=i+1)
     begin
@@ -148,9 +150,7 @@ begin
     #10
     TB_ACT_CEN = 1;
     TB_ACT_WEN = 1;
-    TB_CL_SELECT = 1;
-    TB_O_WEN = 1;
-    TB_O_CEN = 1;
+
     for (i=0; i<36 ; i=i+1)
     begin
         #5
@@ -165,17 +165,19 @@ begin
             error = error+1;
         end
     end
-	
-    
-    TB_CL_SELECT = 0;
+
     TB_ACT_WEN = 1;
     TB_ACT_CEN = 1;
+
+    // Contol goes to Core 
+    TB_CL_SELECT = 0;
+
     
     #100 START = 1;
     #100 START = 0;
 
     #12500
-    //Activation Load and check begins
+    //*************************Final output Load and check begins
 
     p_file = $fopen("output.txt", "r");
 

@@ -2,8 +2,8 @@ module sfu (
 		input 			clk,
 		input			reset,
 		input signed	[15:0]  sfu_in [0:7],
-		input			valid
-		output signed   [127:0] sfu_out;
+		input			valid,
+		output signed   [127:0] sfu_out
 		//create output interfaces to read from sfu_reg_bank and send to SRAMs
 	);
 	
