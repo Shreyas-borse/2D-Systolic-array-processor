@@ -22,31 +22,30 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
   
   genvar i;
 
-  assign o_ready = ~(empty[col-1]) ;
+  assign o_ready = !o_full ;
   assign o_full  = |full ;
   assign o_valid = &(~empty) ;
 
   for (i=0; i<col ; i=i+1) begin : col_num
-      fifo_depth8 #(.bw(bw)) fifo_instance (
+      fifo_depth64 #(.bw(psum_bw)) fifo_instance (
 	 .rd_clk(clk),
 	 .wr_clk(clk),
 	 .rd(rd_en),
 	 .wr(wr[i]),
      .o_empty(empty[i]),
      .o_full(full[i]),
-	 .in(in[(i+1)*bw - 1:(i)*bw]),
-	 .out(out[(i+1)*bw - 1:(i)*bw]),
+	 .in(in[(i+1)*psum_bw - 1:(i)*psum_bw]),
+	 .out(out[(i+1)*psum_bw - 1:(i)*psum_bw]),
      .reset(reset));
   end
 
 
   always @ (posedge clk) begin
    if (reset) begin
-      rd_en <= 0;
+    rd_en <= 0;
    end
    else
-      
-     rd_en <= rd;
+    rd_en <= rd;
  
   end
 

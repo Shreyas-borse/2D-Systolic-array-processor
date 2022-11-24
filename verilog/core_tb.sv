@@ -226,7 +226,7 @@ begin
 
     #500
 
-     $finish;
+     $stop;
 end
 
 initial

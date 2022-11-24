@@ -64,31 +64,49 @@ mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1
   .out_s(ofifo_in),
   .in_w(l0_to_array), // inst[1]:execute, inst[0]: kernel loading
   .inst_w(inst_w),
- // .in_n(128'b0),
+  .in_n(128'b0),
   .valid(array_valid_out) //connect to ofifo valid signal
 );
 
 logic [psum_bw*col - 1: 0] pmem_in;
 logic ofifo_rd;
-logic [col-1 : 0] ofifo_wr;
+// logic [col-1 : 0] ofifo_wr;
 logic ofifo_full;
 logic ofifo_empty;
 logic ofifo_valid;
 
-reg [psum_bw*col -1 :0] sfu_in;
+reg [psum_bw*col -1 :0] OFIFO_out_temp;
 reg [psum_bw*col -1 :0] sfu_out;
 
 ofifo #(.col(col), .psum_bw(psum_bw), .bw(bw)) u_ofifo_inst1(
         .clk(clk),
         .in(ofifo_in),
-        .out(sfu_in),
-        .rd(ofifo_rd),
-        .wr(ofifo_wr),
+        .out(OFIFO_out_temp),
+        .rd(ofifo_valid),
+        .wr(array_valid_out),
         .o_full(ofifo_full),
         .reset(reset),
         .o_ready(ofifo_ready),
         .o_valid(ofifo_valid)
 );
+
+logic signed	[15:0] 	SFU_in	[0:7];
+always@* begin
+	for(int i=0 ; i<8 ; i++)
+		SFU_in[i]	=	$signed(OFIFO_out_temp[16*i +: 16]);
+		//a_vect[ 0 +: 8] // == a_vect[ 7 : 0]
+end
+
+SFU u_SFU(
+		.clk		(clk),
+		.reset		(reset),
+		.OFIFO_out	(SFU_in),
+		.valid      (ofifo_valid)
+		//create output interfaces to read from sfu_reg_bank and send to SRAMs
+	);
+
+
+
 
 assign OP_d = pmem_in;
 
