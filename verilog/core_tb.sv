@@ -141,7 +141,7 @@ begin
     for (i=0; i<36 ; i=i+1)
     begin
         #10
-        TB_ACT_ADDR   = 72 + i;
+        TB_ACT_ADDR   = i;
         a_scan_file = $fscanf(a_file,"%32b", TB_ACT_D);
         D_2D[72+i][31:0] = TB_ACT_D;
     end
@@ -156,7 +156,7 @@ begin
         #5
         TB_ACT_CEN = 0;
         TB_ACT_WEN = 1;
-        TB_ACT_ADDR   = i+72;
+        TB_ACT_ADDR   = i;
         #5
         if (D_2D[72+i][31:0] == TB_ACT_Q)
             $display("%2d-th read data is %h --- Data matched", i, TB_ACT_Q);

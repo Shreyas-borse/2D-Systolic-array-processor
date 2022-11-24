@@ -15,3 +15,4 @@
 ./verilog/core.v
 ./verilog/corelet.sv
 ./verilog/core_tb.sv
+./verilog/SFU.sv

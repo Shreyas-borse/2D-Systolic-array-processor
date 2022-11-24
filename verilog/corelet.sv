@@ -161,10 +161,10 @@ always@ * begin
     inst_w_next     =   inst_w         ;
     weight_reset    =   0;
     AW_mode         =   1;
-    ACT_cen         = 1;
+//    ACT_cen         = 1;
     ACT_wen	    = 1;
     W_wen 	    = 1;
-    W_cen      = 1;
+//   W_cen           = 1;
 
     case(present_state)
         IDLE:
@@ -181,12 +181,12 @@ always@ * begin
                 next_state = W_L0_TO_ARRAY;
                 count_next = 0;
                 l0_wr_next = 0;
-	        W_cen      = 1;
+	        //W_cen      = 1;
             end
             else
             begin
                 AW_mode    = 1;
-	        W_cen      = 0;	
+	        //W_cen      = 0;	
                 next_state = present_state;
                 count_next = count + 1;
                 l0_wr_next = 1;
@@ -218,16 +218,15 @@ always@ * begin
         ACT_SRAM_TO_L0:     
             if(count> 35) 
             begin
-		ACT_cen         = 1;
                 next_state      = ACT_L0_TO_ARRAY;
                 count_next      = 0;
                 l0_wr_next      = 0;
             end
             else 
             begin
-		ACT_cen       = 0;
+		//ACT_cen       = 0;
+		act_addr      = count_next;
                 AW_mode       = 0;
-		act_addr      = count;
                 next_state    = present_state;
                 count_next    = count+1;
                 l0_wr_next    = 1;
@@ -292,8 +291,9 @@ always@ * begin
     endcase
 
     w_addr   = {kij_count,3'b0} + count;
-        
-
+    ACT_cen  = ~(l0_wr_next);
+    W_cen    =  ~(l0_wr_next);
+    
 end
     
 
