@@ -68,7 +68,7 @@ mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1
   .valid(array_valid_out) //connect to ofifo valid signal
 );
 
-logic [psum_bw*col - 1: 0] pmem_in;
+//logic [psum_bw*col - 1: 0] pmem_in;
 logic ofifo_rd;
 logic [col-1 : 0] ofifo_wr;
 logic ofifo_full;
@@ -90,7 +90,14 @@ ofifo #(.col(col), .psum_bw(psum_bw), .bw(bw)) u_ofifo_inst1(
         .o_valid(ofifo_valid)
 );
 
-assign OP_d = pmem_in;
+sfu #() u_sfu_inst1 (
+	.clk(clk),
+	.reset(reset),
+	.sfu_in(sfu_in),
+	.valid()
+	.sfu_out(sfu_out);
+);
+
 
 //typedef enum logic {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
 enum logic [2:0] {IDLE, W_SRAM_TO_L0, W_L0_TO_ARRAY, ACT_SRAM_TO_L0, ACT_L0_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL} present_state, next_state;
@@ -168,7 +175,7 @@ always@ * begin
         W_L0_TO_ARRAY:
             if(count > 23)
             begin
-                next_state      = ACT_L0_TO_ARRAY;
+                next_state      = ACT_SRAM_TO_L0;
                 count_next      = 0;
                 inst_w_next     = 0;
                 l0_rd_next      = 0;
