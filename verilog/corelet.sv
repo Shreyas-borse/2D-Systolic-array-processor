@@ -9,13 +9,13 @@ module corelet
 // SRAM interface for Activations and Weights (ie AW) to FSM
     input [31:0] ACT_q, //from sram to lo
     output [6:0] ACT_addr,
-    output ACT_cen,
-    output ACT_wen,
+    output logic ACT_cen,
+    output logic ACT_wen,
 
     input [31:0] W_q, //from sram to lo
     output [6:0] W_addr,
-    output W_cen,
-    output W_wen,
+    output logic W_cen,
+    output logic W_wen,
 
 // SRAM interface for PMEM and output_final (ie OP) TO FSM
     input [127:0] OP_q,
@@ -127,7 +127,7 @@ logic weight_reset;
 // sequence complete from FSM to TB
 always @(posedge clk or posedge reset) begin
     if(reset)
-        seq_done <=0;
+        seq_done <= 0;
     else 
         seq_done <= (next_state == IDLE && OUT_SRAM_FILL);
     end
@@ -291,7 +291,7 @@ always@ * begin
             end
     endcase
 
-    w_addr   = {kij_count,3'b0} + counter;
+    w_addr   = {kij_count,3'b0} + count;
         
 
 end
