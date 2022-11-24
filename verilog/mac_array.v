@@ -11,7 +11,7 @@ module mac_array (clk, reset, out_s, in_w, in_n, inst_w, valid);
   output [psum_bw*col-1:0] out_s;
   input  [row*bw-1:0] in_w; // inst[1]:execute, inst[0]: kernel loading
   input  [1:0] inst_w;
-  input  [psum_bw*col-1:0] in_n;
+//  input  [psum_bw*col-1:0] in_n;
   output [col-1:0] valid;
 
 
