@@ -105,10 +105,13 @@ SFU u_SFU(
 		//create output interfaces to read from sfu_reg_bank and send to SRAMs
 	);
 
-
+logic [6:0] act_addr; 
+logic [6:0] w_addr;
 
 
 assign OP_d = pmem_in;
+assign ACT_addr = act_addr;
+assign W_addr = w_addr;
 
 //typedef enum logic {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
 enum logic [2:0] {IDLE, W_SRAM_TO_L0, W_L0_TO_ARRAY, ACT_SRAM_TO_L0, ACT_L0_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL} present_state, next_state;
@@ -178,6 +181,7 @@ always@ * begin
             else
             begin
                 AW_mode    = 1;
+		
                 next_state = present_state;
                 count_next = count + 1;
                 l0_wr_next = 1;
@@ -215,7 +219,9 @@ always@ * begin
             end
             else 
             begin
+
                 AW_mode       = 0;
+		act_addr      = count;
                 next_state    = present_state;
                 count_next    = count+1;
                 l0_wr_next    = 1;
@@ -227,12 +233,12 @@ always@ * begin
 				next_state      = (kij_count == 8) ? SFU_COMPUTE : W_SRAM_TO_L0 ;
 				count_next 	    =  0;
 				weight_reset	=  0;
-                kij_count_next  = kij_count== 8 ? 8 : kij_count + 1;
+                		kij_count_next  = kij_count== 8 ? 8 : kij_count + 1;
             end
             else if(count>56)
             begin     //Asserting reset to Mac_array for 1 cycle to clear the weights
 				next_state 		= present_state;
-				count_next 	= count + 1;
+				count_next      	= count + 1;
 				weight_reset 		= 1;
             end
             else if(count>55)
@@ -278,6 +284,9 @@ always@ * begin
                 count = count + 1;
             end
     endcase
+
+    w_addr   = {kij_count,3'b0} + counter;
+
 end
     
 
