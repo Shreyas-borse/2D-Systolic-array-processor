@@ -28,8 +28,6 @@ parameter col = 8;
 parameter bw = 4;
 parameter psum_bw = 16;
 
-reg [psum_bw*col -1 :0] sfu_in;
-reg [psum_bw*col -1 :0] sfu_out;
 
 reg [31:0] l0_to_array;
 reg l0_rd;
@@ -70,16 +68,18 @@ mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1
 
 logic [psum_bw*col - 1: 0] pmem_in;
 logic ofifo_rd;
-logic ofifo_wr[col-1 : 0];
+logic [col-1 : 0] ofifo_wr;
 logic ofifo_full;
 logic ofifo_empty;
 logic ofifo_valid;
 
+reg [psum_bw*col -1 :0] sfu_in;
+reg [psum_bw*col -1 :0] sfu_out;
 
 ofifo #(.col(col), .bw(bw)) u_ofifo_inst1(
         .clk(clk),
         .in(ofifo_in),
-        .out(pmem_in),
+        .out(sfu_in),
         .rd(ofifo_rd),
         .wr(ofifo_wr),
         .o_full(ofifo_full),
