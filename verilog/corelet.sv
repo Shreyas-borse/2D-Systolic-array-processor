@@ -76,7 +76,7 @@ logic ofifo_valid;
 reg [psum_bw*col -1 :0] sfu_in;
 reg [psum_bw*col -1 :0] sfu_out;
 
-ofifo #(.col(col), .psum_bw(psum_bw)) u_ofifo_inst1(
+ofifo #(.col(col), .psum_bw(psum_bw), .bw(bw)) u_ofifo_inst1(
         .clk(clk),
         .in(ofifo_in),
         .out(sfu_in),
