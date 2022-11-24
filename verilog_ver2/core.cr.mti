@@ -1,0 +1,99 @@
+C:/Fall_2022/ECE284/verilog/mac.sv {1 {vlog -work work -sv -stats=none C:/Fall_2022/ECE284/verilog/mac.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module mac
+
+Top level modules:
+	mac
+
+} {} {}} C:/Fall_2022/ECE284/verilog/l0.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/l0.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module l0
+
+Top level modules:
+	l0
+
+} {} {}} C:/Fall_2022/ECE284/verilog/fifo_mux_2_1.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/fifo_mux_2_1.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module fifo_mux_2_1
+
+Top level modules:
+	fifo_mux_2_1
+
+} {} {}} C:/Fall_2022/ECE284/verilog/sram_tb.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/sram_tb.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module sram_tb
+
+Top level modules:
+	sram_tb
+
+} {} {}} C:/Fall_2022/ECE284/verilog/fifo_depth8.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/fifo_depth8.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module fifo_depth8
+
+Top level modules:
+	fifo_depth8
+
+} {} {}} C:/Fall_2022/ECE284/verilog/l0_tb.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/l0_tb.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module l0_tb
+
+Top level modules:
+	l0_tb
+
+} {} {}} C:/Fall_2022/ECE284/verilog/OP_sram_340x128.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/OP_sram_340x128.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module OP_sram_340x128
+
+Top level modules:
+	OP_sram_340x128
+
+} {} {}} C:/Fall_2022/ECE284/verilog/fifo_depth64.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/fifo_depth64.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module fifo_depth64
+
+Top level modules:
+	fifo_depth64
+
+} {} {}} C:/Fall_2022/ECE284/verilog/ofifo.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/ofifo.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module ofifo
+
+Top level modules:
+	ofifo
+
+} {} {}} C:/Fall_2022/ECE284/verilog/fifo_mux_8_1.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/fifo_mux_8_1.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module fifo_mux_8_1
+
+Top level modules:
+	fifo_mux_8_1
+
+} {} {}} C:/Fall_2022/ECE284/verilog/mac_tile.sv {1 {vlog -work work -sv -stats=none C:/Fall_2022/ECE284/verilog/mac_tile.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module mac_tile
+
+Top level modules:
+	mac_tile
+
+} {} {}} C:/Fall_2022/ECE284/verilog/SFU.sv {1 {vlog -work work -sv -stats=none C:/Fall_2022/ECE284/verilog/SFU.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module SFU
+
+Top level modules:
+	SFU
+
+} {} {}} C:/Fall_2022/ECE284/verilog/fifo_mux_16_1.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/fifo_mux_16_1.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module fifo_mux_16_1
+
+Top level modules:
+	fifo_mux_16_1
+
+} {} {}} C:/Fall_2022/ECE284/verilog/sram_128b_w2048.v {1 {vlog -work work -stats=none C:/Fall_2022/ECE284/verilog/sram_128b_w2048.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module sram_128b_w2048
+
+Top level modules:
+	sram_128b_w2048
+
+} {} {}}
