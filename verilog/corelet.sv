@@ -55,7 +55,7 @@ l0 #( .bw(bw), .row(row)) u_l0_inst1 (
 logic [col*psum_bw -1 : 0] ofifo_in;
 logic [col -1 : 0] array_valid_out;
 
-logic [1:0] inst_w;
+logic [1:0] inst_w, inst_w_next; 
 
 mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1 
 (
@@ -68,7 +68,7 @@ mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1
   .valid(array_valid_out) //connect to ofifo valid signal
 );
 
-//logic [psum_bw*col - 1: 0] pmem_in;
+logic [psum_bw*col - 1: 0] pmem_in;
 logic ofifo_rd;
 logic [col-1 : 0] ofifo_wr;
 logic ofifo_full;
@@ -90,24 +90,17 @@ ofifo #(.col(col), .psum_bw(psum_bw), .bw(bw)) u_ofifo_inst1(
         .o_valid(ofifo_valid)
 );
 
-sfu #() u_sfu_inst1 (
-	.clk(clk),
-	.reset(reset),
-	.sfu_in(sfu_in),
-	.valid()
-	.sfu_out(sfu_out);
-);
-
+assign OP_d = pmem_in;
 
 //typedef enum logic {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
 enum logic [2:0] {IDLE, W_SRAM_TO_L0, W_L0_TO_ARRAY, ACT_SRAM_TO_L0, ACT_L0_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL} present_state, next_state;
 
-logic [6:0] count, count_next;
+logic [7:0] count, count_next;
 logic [3:0] kij_count, kij_count_next;
 //logic [5:0] act_count, act_count_next;
 logic     l0_wr_next;
 logic     l0_rd_next;
-logic    inst_w_next; 
+
 logic weight_reset;
 
 // sequence complete from FSM to TB
@@ -227,7 +220,7 @@ always@ * begin
             else if(count>55)
             begin// 36 + 8 + 8 + 1 + 1 + buffer(2)
                 next_state    = present_state;
-                count_next    = 0;
+                count_next    = count + 1;
                 inst_w_next   = 0;
                 l0_rd_next    = 0;
             end
