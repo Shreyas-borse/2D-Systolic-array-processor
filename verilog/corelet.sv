@@ -11,10 +11,12 @@ module corelet
     output [6:0] ACT_addr,
     output ACT_cen,
     output ACT_wen,
+
     input [31:0] W_q, //from sram to lo
     output [6:0] W_addr,
     output W_cen,
     output W_wen,
+
 // SRAM interface for PMEM and output_final (ie OP) TO FSM
     input [127:0] OP_q,
     output [127:0] OP_d,
@@ -90,10 +92,8 @@ ofifo #(.col(col), .psum_bw(psum_bw), .bw(bw)) u_ofifo_inst1(
 
 assign OP_d = pmem_in;
 
-
 //typedef enum logic {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
-typedef enum {IDLE, W_SRAM_TO_L0, W_L0_TO_ARRAY, ACT_SRAM_TO_L0, ACT_L0_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL} state_coding_t;
-state_coding_t present_state, next_state;
+enum logic [2:0] {IDLE, W_SRAM_TO_L0, W_L0_TO_ARRAY, ACT_SRAM_TO_L0, ACT_L0_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL} present_state, next_state;
 
 logic [6:0] count, count_next;
 logic [3:0] kij_count, kij_count_next;
@@ -131,6 +131,7 @@ always @(posedge clk or posedge reset) begin
 end
 
 always@ * begin
+
     next_state      =   present_state  ;
     count_next      =   count          ;
     kij_count_next  =   kij_count      ;
@@ -138,6 +139,8 @@ always@ * begin
     l0_rd_next      =   l0_rd          ;
     inst_w_next     =   inst_w         ;
     weight_reset    =   0;
+    AW_mode         =   1;
+
     case(present_state)
         IDLE:
             if(seq_begin) 
@@ -201,12 +204,12 @@ always@ * begin
             end
 
         ACT_L0_TO_ARRAY:
-            if(count>57)
+            if(count> 57)
             begin   // +2 over computation for reset of the state
-				next_state      = kij_count== 8 ? SFU_COMPUTE : W_SRAM_TO_L0;
+				next_state      = (kij_count == 8) ? SFU_COMPUTE : W_SRAM_TO_L0 ;
 				count_next 	    =  0;
-				weight_reset	= 0;
-                kij_count_next        = kij_count== 8 ? 8 : kij_count + 1;
+				weight_reset	=  0;
+                kij_count_next  = kij_count== 8 ? 8 : kij_count + 1;
             end
             else if(count>56)
             begin     //Asserting reset to Mac_array for 1 cycle to clear the weights
