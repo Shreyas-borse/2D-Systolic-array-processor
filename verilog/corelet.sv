@@ -197,21 +197,21 @@ always@ * begin
             begin
                 next_state      = ACT_SRAM_TO_L0;
                 count_next      = 0;
-                inst_w_next     = 0;
+                inst_w_next     = 2'b00;
                 l0_rd_next      = 0;
             end
             else if(count > 7)
             begin
                 next_state      = present_state;
                 count_next      = count + 1;
-                inst_w_next     = 0;
+                inst_w_next     = 2'b00;
                 l0_rd_next      = 0;
             end
             else
             begin
                 next_state      = present_state;
                 count_next      = count + 1;
-                inst_w_next     = 1;
+                inst_w_next     = 2'b01;
                 l0_rd_next      = 1;
             end
 
@@ -250,21 +250,21 @@ always@ * begin
             begin// 36 + 8 + 8 + 1 + 1 + buffer(2)
                 next_state    = present_state;
                 count_next    = count + 1;
-                inst_w_next   = 0;
+                inst_w_next   = 2'b00;
                 l0_rd_next    = 0;
             end
             else if(count> 35)  
             begin
                 next_state    = present_state;
                 count_next    = count+1;
-                inst_w_next   = 0;
+                inst_w_next   = 2'b00;
                 l0_rd_next    = 0;
             end
             else
             begin
                 next_state      = present_state;
                 count_next      = count + 1;
-                inst_w_next     = 2;
+                inst_w_next     = 2'b10;
                 l0_rd_next      = 1;
             end
 
