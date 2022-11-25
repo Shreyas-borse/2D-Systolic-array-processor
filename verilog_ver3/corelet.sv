@@ -18,11 +18,13 @@ module corelet
     output logic W_wen,
 
 // SRAM interface for PMEM and output_final (ie OP) TO FSM
-    input [127:0] OP_q,
-    output [127:0] OP_d,
-    output [3:0] OP_addr,
-    output OP_cen,
-    output OP_wen,
+    input  logic [127:0] OP_q,
+    output logic [127:0] OP_d,
+    output logic [3:0] OP_addr,
+    output logic  OP_cen,
+    output logic  OP_wen,
+
+//SFU SIGNALS
     output 		[127:0] sfu_out_0,
     output 		[127:0] sfu_out_1,
     output 		[127:0] sfu_out_2,
@@ -38,7 +40,8 @@ module corelet
     output 		[127:0] sfu_out_12,
     output 		[127:0] sfu_out_13,
     output 		[127:0] sfu_out_14,
-    output 		[127:0] sfu_out_15
+    output 		[127:0] sfu_out_15,
+    output reg		sfu_done
 );
 
 parameter row = 8;
@@ -120,8 +123,7 @@ SFU u_SFU(
 		.clk		(clk),
 		.reset		(reset),
 		.OFIFO_out	(SFU_in),
-		.valid      (ofifo_valid),
-		.sfu_done    (sfu_done),
+		.valid          (ofifo_valid),
 		.sfu_out_0 	(sfu_out_0),
 		.sfu_out_1 	(sfu_out_1),
 		.sfu_out_2 	(sfu_out_2),
@@ -143,7 +145,7 @@ SFU u_SFU(
 
 
 //typedef enum logic {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
-enum logic [2:0] {IDLE, W_SRAM_TO_L0, W_L0_TO_ARRAY, ACT_SRAM_TO_L0, ACT_L0_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL} present_state, next_state;
+enum logic [2:0] {IDLE, W_SRAM_TO_L0, W_L0_TO_ARRAY, ACT_SRAM_TO_L0, ACT_L0_TO_ARRAY, SFU_DONE_TO_OUTSRAM} present_state, next_state;
 
 logic [7:0] count, count_next;
 logic [3:0] kij_count, kij_count_next;
@@ -155,11 +157,15 @@ logic     l0_rd_next;
 
 // sequence complete from FSM to TB
 always @(posedge clk or posedge reset) begin
-    if(reset)
+    if(reset) begin
         seq_done <=0;
-    else 
-        seq_done <= (next_state == IDLE && OUT_SRAM_FILL);
+        sfu_done <=0;
+	end
+    else begin
+        sfu_done <= (next_state == SFU_DONE_TO_OUTSRAM);
+        seq_done <= (next_state == IDLE && SFU_DONE_TO_OUTSRAM);
     end
+ end
 
 always @(posedge clk or posedge reset) begin
     if(reset) begin
@@ -182,17 +188,17 @@ end
 
 always@ * begin
     // input [31:0] W_q, //from sram to lo
-    W_addr		= 	{kij_count,3'b0} + count;
-    W_cen 		=	!l0_wr_next;
-    W_wen		=	1'b1;
+    	W_addr		= 	{kij_count,3'b0} + count;
+    	W_cen 		=	!l0_wr_next;
+    	W_wen		=	1'b1;
 	ACT_addr	=	count;
-    ACT_cen 	=	!l0_wr_next;
+	ACT_cen 	=	!l0_wr_next;
 	ACT_wen		=	1'b1;
 	AW_mode		=	(present_state==W_SRAM_TO_L0) || (present_state==W_L0_TO_ARRAY);
-	// assign I_ADDR    = AW_ADDR_MUX;    //output  [6:0] 
-    // assign I_CEN     = !write_next;    //output        
-    // assign I_WEN     = 1'b1;           //output       
+	OP_cen		= 1;
+	OP_wen		= 1;
 end
+
 
 
 always@ * begin
@@ -272,7 +278,7 @@ always@ * begin
             if(count> 57)
             begin   // +2 over computation for reset of the state
             		if (kij_count == 8) begin
-            			next_state = SFU_COMPUTE;
+            			next_state = SFU_DONE_TO_OUTSRAM;
             			kij_count_next = 8;
             			count_next 	 =  0;
 				weight_reset	 =  0;
@@ -283,10 +289,7 @@ always@ * begin
 				weight_reset	 =  0;
                 		kij_count_next = kij_count +1;
                 	end
-//				next_state      = (kij_count == 8) ? SFU_COMPUTE : W_SRAM_TO_L0 ;
-//				count_next 	=  0;
-//				weight_reset	=  0;
-//                                kij_count_next  = (kij_count== 8) ? 8 : kij_count + 1;
+
             end
             else if(count>56)
             begin     //Asserting reset to Mac_array for 1 cycle to clear the weights
@@ -316,28 +319,55 @@ always@ * begin
                 l0_rd_next      = 1;
             end
 
-        SFU_COMPUTE:
-            if(count>72) 
+        SFU_DONE_TO_OUTSRAM:
+            if(count>15) 
             begin
-                next_state      = OUT_SRAM_FILL;
-                count_next    = 0;
+                next_state      = IDLE;
+                count_next      = 0;
+		OP_cen		= 1;
+		OP_wen		= 1;
             end
             else begin
                 next_state      = present_state;
-                count         = count + 1;
+                count_next      = count + 1;
+		OP_addr		= count;
+		OP_cen		= 0;
+		OP_wen		= 0;
+		case (count) 
+			4'd0: OP_d = sfu_out_0;		
+			4'd1: OP_d = sfu_out_1;		
+			4'd2: OP_d = sfu_out_2;		
+			4'd3: OP_d = sfu_out_3;		
+			4'd4: OP_d = sfu_out_4;		
+			4'd5: OP_d = sfu_out_5;		
+			4'd6: OP_d = sfu_out_6;		
+			4'd7: OP_d = sfu_out_7;		
+			4'd8: OP_d = sfu_out_8;		
+			4'd9: OP_d = sfu_out_9;		
+			4'd10: OP_d = sfu_out_10;		
+			4'd11: OP_d = sfu_out_11;		
+			4'd12: OP_d = sfu_out_12;		
+			4'd13: OP_d = sfu_out_13;		
+			4'd14: OP_d = sfu_out_14;		
+			4'd15: OP_d = sfu_out_15;
+		endcase		
             end
 
-        OUT_SRAM_FILL:
-            if(count>15) begin
-                next_state      = IDLE;
-                count_next      = 0;
-            end
-            else begin
-                next_state = present_state;
-                count = count + 1;
-            end
+
+//        OUT_SRAM_FILL:
+//            if(count>15) begin
+//                next_state      = IDLE;
+//                count_next      = 0;
+//            end
+//            else begin
+//                next_state = present_state;
+//                count_next = count + 1;
+
+//            end
     endcase
 end
+
+
     
 
 

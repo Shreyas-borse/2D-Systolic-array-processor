@@ -37,7 +37,7 @@ integer error;
 logic SEQ_DONE;
 
 logic [127:0]  sfu_out_tot [15:0]; 
-
+logic SFU_DONE;
 logic [127:0]	sfu_out_0;
 logic [127:0]	sfu_out_1;
 logic [127:0]	sfu_out_2;
@@ -97,7 +97,7 @@ core u_core(
     .dut_OP_q     (TB_O_Q),
 
     .dut_cl_sel(TB_CL_SELECT),
-
+    .sfu_done (SFU_DONE),
     .sfu_out_0(sfu_out_0),
     .sfu_out_1(sfu_out_1),
     .sfu_out_2(sfu_out_2),
@@ -230,6 +230,11 @@ begin
     #12500
     //Activation Load and check begins
 
+
+    ///SRAM WRITE SIGNAL
+
+    
+
     p_file = $fopen("output_project.txt", "r");
 
     // Following three lines are to remove the first three comment lines of the file
@@ -246,7 +251,7 @@ begin
     TB_CL_SELECT = 1;
     TB_O_WEN = 1;
     TB_O_CEN = 1;
-
+                                                                                                             
     for (i=0; i<16 ; i=i+1)
     begin
         #10
@@ -254,6 +259,16 @@ begin
         //$display("%2d- pscan is %b --- Data matched", i,TB_O_D);
         D_2D_128[i][127:0] = TB_O_D;
     end
+
+    for (i=0; i<16 ; i=i+1)
+    begin
+    	if (D_2D_128[i][127:0] == sfu_out_tot[i])                                                                       
+         $display("%2d-th SFU_OUT is %h --- Data matched", i, sfu_out_tot[i]);                                     
+    	else begin                                                                                                      
+         	$display("%2d-th SFU_OUT is %h, expected data is %h --- Data ERROR !!!", i, sfu_out_tot[i], D_2D_128[i]); 
+         	error = error+1;                                                                                            
+    	end
+    end 
     #10
     TB_ACT_CEN = 1;
     TB_ACT_WEN = 1;
@@ -269,24 +284,20 @@ begin
         TB_O_WEN = 1;
         TB_O_ADDR   = i;
         #5
-      //  if (D_2D_128[i][127:0] == TB_O_Q)
-      //      $display("%2d-th read data is %h --- Data matched", i, TB_O_Q);
-      //  else begin
-      //      $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, TB_O_Q, D_2D_128[i]);
-      //      error = error+1;
-      //  end
-    
-        if (D_2D_128[i][127:0] == sfu_out_tot[i])
-            $display("%2d-th read data is %h --- Data matched", i, sfu_out_tot[i]);
+        if (D_2D_128[i][127:0] == TB_O_Q)
+            $display("%2d-th read data from OP_SRAM is %h --- Data matched", i, TB_O_Q);
         else begin
-            $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, sfu_out_tot[i], D_2D_128[i]);
+            $display("%2d-th read data from 0P_SRAM is %h, expected data is %h --- Data ERROR !!!", i, TB_O_Q, D_2D_128[i]);
             error = error+1;
         end
+    
     end
-    #500
 
-     $stop;
-     $finish;
+    #100
+ 
+    $stop;
+    $finish;
+  
 end
 
 initial

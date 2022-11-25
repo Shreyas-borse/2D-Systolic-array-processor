@@ -18,10 +18,7 @@ module SFU (
 	output reg		[127:0] sfu_out_12,
 	output reg		[127:0] sfu_out_13,
 	output reg		[127:0] sfu_out_14,
-	output reg		[127:0] sfu_out_15,
-
-	output 		sfu_done
-	
+	output reg		[127:0] sfu_out_15
 );
 logic [127:0] sfu_out_0_lm;
 logic [127:0] sfu_out_1_lm;
@@ -121,6 +118,7 @@ assign sfu_out_12_lm = sfu_reg_store[12];
 assign sfu_out_13_lm = sfu_reg_store[13];
 assign sfu_out_14_lm = sfu_reg_store[14];
 assign sfu_out_15_lm = sfu_reg_store[15];
+
 	
 // if value is 5'd16, then it should not be added
 assign LUT_map[0  ] =  5'd0  ;

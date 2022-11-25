@@ -47,7 +47,8 @@ module core
     output 		[127:0] sfu_out_12,
     output 		[127:0] sfu_out_13,
     output 		[127:0] sfu_out_14,
-    output 		[127:0] sfu_out_15
+    output 		[127:0] sfu_out_15,
+    output                      sfu_done
 );
 
 parameter row = 8;
@@ -105,7 +106,7 @@ assign mux_W_addr = dut_cl_sel?  dut_W_addr: core_W_addr;
 assign mux_W_cen  = dut_cl_sel?  dut_W_cen: core_W_cen;
 assign mux_W_wen  = dut_cl_sel?  dut_W_wen: core_W_wen;
 
-assign mux_OP_d    = dut_cl_sel? dut_OP_d: core_OP_d;                       
+assign mux_OP_d    = core_OP_d;                       
 assign mux_OP_addr = dut_cl_sel?  dut_OP_addr: core_OP_addr;
 assign mux_OP_cen  = dut_cl_sel?  dut_OP_cen: core_OP_cen;
 assign mux_OP_wen  = dut_cl_sel?  dut_OP_wen: core_OP_wen;
@@ -174,8 +175,8 @@ corelet #(.row(row), .col(col)) corelet_inst1
              .sfu_out_12(sfu_out_12),
              .sfu_out_13(sfu_out_13),
              .sfu_out_14(sfu_out_14),
-             .sfu_out_15(sfu_out_15)
-
+             .sfu_out_15(sfu_out_15),
+	     .sfu_done(sfu_done)
 );
 
 endmodule
