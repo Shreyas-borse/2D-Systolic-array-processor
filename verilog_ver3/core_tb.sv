@@ -1,12 +1,10 @@
 // Created by prof. Mingu Kang @VVIP Lab in UCSD ECE department
 // Please do not spread this code without permission 
-`timescale 1ns/1ns
-
 module core_tb;
 
 logic CLK;
 logic RESET;
-logic START;
+
 
 logic   [31:0]  TB_ACT_D;
 wire    [31:0]  TB_ACT_Q;  //logic can't be connected to output port for some reason
@@ -22,14 +20,14 @@ logic           TB_W_WEN;
 
 logic   [127:0] TB_O_D;
 wire    [127:0] TB_O_Q;
-logic   [8:0]   TB_O_ADDR;
+logic   [3:0]   TB_O_ADDR;
 logic           TB_O_CEN;
 logic           TB_O_WEN;
 
 logic           TB_CL_SELECT;
 logic   [31:0]  D_2D [108:0];
 logic   [127:0] D_2D_128 [15:0];
-
+logic   START;
 integer w_file, w_scan_file ; // file_handler
 integer a_file, a_scan_file ; // file_handler
 integer p_file, p_scan_file ; // file_handler
@@ -38,11 +36,47 @@ integer captured_data;
 integer error;
 logic SEQ_DONE;
 
+logic [127:0]  sfu_out_tot [15:0]; 
+
+logic [127:0]	sfu_out_0;
+logic [127:0]	sfu_out_1;
+logic [127:0]	sfu_out_2;
+logic [127:0]	sfu_out_3;
+logic [127:0]	sfu_out_4;
+logic [127:0]	sfu_out_5;
+logic [127:0]	sfu_out_6;
+logic [127:0]	sfu_out_7;
+logic [127:0]	sfu_out_8;
+logic [127:0]	sfu_out_9;
+logic [127:0]	sfu_out_10;
+logic [127:0]	sfu_out_11;
+logic [127:0]	sfu_out_12;
+logic [127:0]	sfu_out_13;
+logic [127:0]	sfu_out_14;
+logic [127:0]	sfu_out_15;
+
+assign sfu_out_tot [0] =  sfu_out_0;  
+assign sfu_out_tot [1] =  sfu_out_1;  
+assign sfu_out_tot [2] =  sfu_out_2;  
+assign sfu_out_tot [3] =  sfu_out_3;  
+assign sfu_out_tot [4] =  sfu_out_4;  
+assign sfu_out_tot [5] =  sfu_out_5;  
+assign sfu_out_tot [6] =  sfu_out_6;  
+assign sfu_out_tot [7] =  sfu_out_7;  
+assign sfu_out_tot [8] =  sfu_out_8;  
+assign sfu_out_tot [9] =  sfu_out_9;  
+assign sfu_out_tot [10] =  sfu_out_10;  
+assign sfu_out_tot [11] =  sfu_out_11;  
+assign sfu_out_tot [12] =  sfu_out_12;  
+assign sfu_out_tot [13] =  sfu_out_13;  
+assign sfu_out_tot [14] =  sfu_out_14;  
+assign sfu_out_tot [15] =  sfu_out_15;  
+
 core u_core(
     .clk        (CLK),
     .reset      (RESET),
-    .seq_begin      (START),
-	.seq_done		(SEQ_DONE),
+    .seq_begin  (START),
+    .seq_done	(SEQ_DONE),
 
     .dut_ACT_addr  (TB_ACT_ADDR),
     .dut_ACT_cen   (TB_ACT_CEN),
@@ -62,7 +96,24 @@ core u_core(
     .dut_OP_d     (TB_O_D),
     .dut_OP_q     (TB_O_Q),
 
-    .dut_cl_sel(TB_CL_SELECT)
+    .dut_cl_sel(TB_CL_SELECT),
+
+    .sfu_out_0(sfu_out_0),
+    .sfu_out_1(sfu_out_1),
+    .sfu_out_2(sfu_out_2),
+    .sfu_out_3(sfu_out_3),
+    .sfu_out_4(sfu_out_4),
+    .sfu_out_5(sfu_out_5),
+    .sfu_out_6(sfu_out_6),
+    .sfu_out_7(sfu_out_7),
+    .sfu_out_8(sfu_out_8),
+    .sfu_out_9(sfu_out_9),
+    .sfu_out_10(sfu_out_10),
+    .sfu_out_11(sfu_out_11),
+    .sfu_out_12(sfu_out_12),
+    .sfu_out_13(sfu_out_13),
+    .sfu_out_14(sfu_out_14),
+    .sfu_out_15(sfu_out_15)
     );
 
 
@@ -76,7 +127,7 @@ begin
     RESET = 1;
     START = 0;
   
-    w_file = $fopen("weight.txt", "r");
+    w_file = $fopen("weight_project.txt", "r");
 
     // Following three lines are to remove the first three comment lines of the file
     w_scan_file = $fscanf(w_file,"%s", captured_data);
@@ -125,7 +176,7 @@ begin
 
     //Activation Load and check begins
 
-    a_file = $fopen("activation.txt", "r");
+    a_file = $fopen("activation_project.txt", "r");
 
     // Following three lines are to remove the first three comment lines of the file
     a_scan_file = $fscanf(a_file,"%s", captured_data);
@@ -179,7 +230,7 @@ begin
     #12500
     //Activation Load and check begins
 
-    p_file = $fopen("psum.txt", "r");
+    p_file = $fopen("output_project.txt", "r");
 
     // Following three lines are to remove the first three comment lines of the file
     p_scan_file = $fscanf(p_file,"%s", captured_data);
@@ -200,6 +251,7 @@ begin
     begin
         #10
         p_scan_file = $fscanf(p_file,"%128b", TB_O_D);
+        //$display("%2d- pscan is %b --- Data matched", i,TB_O_D);
         D_2D_128[i][127:0] = TB_O_D;
     end
     #10
@@ -217,18 +269,24 @@ begin
         TB_O_WEN = 1;
         TB_O_ADDR   = i;
         #5
-        if (D_2D_128[i][127:0] == TB_O_Q)
-            $display("%2d-th read data is %h --- Data matched", i, TB_O_Q);
+      //  if (D_2D_128[i][127:0] == TB_O_Q)
+      //      $display("%2d-th read data is %h --- Data matched", i, TB_O_Q);
+      //  else begin
+      //      $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, TB_O_Q, D_2D_128[i]);
+      //      error = error+1;
+      //  end
+    
+        if (D_2D_128[i][127:0] == sfu_out_tot[i])
+            $display("%2d-th read data is %h --- Data matched", i, sfu_out_tot[i]);
         else begin
-            $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, TB_O_Q, D_2D_128[i]);
+            $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, sfu_out_tot[i], D_2D_128[i]);
             error = error+1;
         end
     end
-    
-
     #500
 
      $stop;
+     $finish;
 end
 
 initial

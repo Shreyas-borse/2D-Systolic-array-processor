@@ -1,6 +1,6 @@
 // Created by prof. Mingu Kang @VVIP Lab in UCSD ECE department
 // Please do not spread this code without permission 
-module mac_tile (clk, out_s, in_w, out_e, in_n, inst_w, inst_e, reset, debug_tile_weight);
+module mac_tile (clk, out_s, in_w, out_e, in_n, inst_w, inst_e, reset); //, debug_tile_weight);
 
 parameter bw = 4;
 parameter psum_bw = 16;
@@ -13,7 +13,7 @@ output [1:0] 			inst_e;	//latched version of inst_w;
 input  [psum_bw-1:0] 	in_n;	//in_n is input psum
 input  					clk;
 input  					reset;
-output	logic [bw-1:0]		debug_tile_weight;
+//output	logic [bw-1:0]		debug_tile_weight;
 
 
 reg 		[1:0] 			inst_q; 	//connected to inst_e ; latched from inst_w;  when reset : make inst_q='h0 and load_ready_q=1'b1 (basically means ready to accept new weight, if it is 0 it won't update the weights);
@@ -23,7 +23,7 @@ reg signed 	[psum_bw-1:0] 	c_q;
 reg 						load_ready_q;
 wire signed [psum_bw-1:0] 	mac_out;
 
-assign debug_tile_weight = b_q;
+//assign debug_tile_weight = b_q;
 
 always @(posedge clk)
 begin

@@ -20,9 +20,25 @@ module corelet
 // SRAM interface for PMEM and output_final (ie OP) TO FSM
     input [127:0] OP_q,
     output [127:0] OP_d,
-    output [8:0] OP_addr,
+    output [3:0] OP_addr,
     output OP_cen,
-    output OP_wen
+    output OP_wen,
+    output 		[127:0] sfu_out_0,
+    output 		[127:0] sfu_out_1,
+    output 		[127:0] sfu_out_2,
+    output 		[127:0] sfu_out_3,
+    output 		[127:0] sfu_out_4,
+    output 		[127:0] sfu_out_5,
+    output 		[127:0] sfu_out_6,
+    output 		[127:0] sfu_out_7,
+    output 		[127:0] sfu_out_8,
+    output 		[127:0] sfu_out_9,
+    output 		[127:0] sfu_out_10,
+    output 		[127:0] sfu_out_11,
+    output 		[127:0] sfu_out_12,
+    output 		[127:0] sfu_out_13,
+    output 		[127:0] sfu_out_14,
+    output 		[127:0] sfu_out_15
 );
 
 parameter row = 8;
@@ -58,7 +74,7 @@ logic [col*psum_bw -1 : 0] ofifo_in;
 logic [col -1 : 0] array_valid_out;
 
 logic [1:0] inst_w, inst_w_next; 
-logic [bw-1:0] 			debug_array_weight [0:7][0:7];
+//logic [bw-1:0] 			debug_array_weight [0:7][0:7];
 
 mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1 
 (
@@ -68,8 +84,8 @@ mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1
   .in_w(l0_to_array), // inst[1]:execute, inst[0]: kernel loading
   .inst_w(inst_w),
   .in_n(128'b0),
-  .valid(array_valid_out),
-  .debug_array_weight(debug_array_weight)  //connect to ofifo valid signal
+  .valid(array_valid_out)
+//  .debug_array_weight(debug_array_weight)  //connect to ofifo valid signal
 );
 
 // logic [psum_bw*col - 1: 0] pmem_in;
@@ -79,7 +95,6 @@ logic ofifo_empty;
 logic ofifo_valid;
 
 reg [psum_bw*col -1 :0] OFIFO_out_temp;
-reg [psum_bw*col -1 :0] sfu_out;
 
 ofifo #(.col(col), .psum_bw(psum_bw), .bw(bw)) u_ofifo_inst1(
         .clk(clk),
@@ -99,11 +114,31 @@ always@* begin
 		SFU_in[i]	=	$signed(OFIFO_out_temp[16*i +: 16]);
 end
 
+
+
 SFU u_SFU(
 		.clk		(clk),
 		.reset		(reset),
 		.OFIFO_out	(SFU_in),
-		.valid      (ofifo_valid)
+		.valid      (ofifo_valid),
+		.sfu_done    (sfu_done),
+		.sfu_out_0 	(sfu_out_0),
+		.sfu_out_1 	(sfu_out_1),
+		.sfu_out_2 	(sfu_out_2),
+		.sfu_out_3 	(sfu_out_3),
+		.sfu_out_4 	(sfu_out_4),
+		.sfu_out_5 	(sfu_out_5),
+		.sfu_out_6 	(sfu_out_6),
+		.sfu_out_7 	(sfu_out_7),
+		.sfu_out_8 	(sfu_out_8),
+		.sfu_out_9 	(sfu_out_9),
+		.sfu_out_10	(sfu_out_10),
+		.sfu_out_11	(sfu_out_11),
+		.sfu_out_12	(sfu_out_12),
+		.sfu_out_13	(sfu_out_13),
+		.sfu_out_14	(sfu_out_14),
+		.sfu_out_15	(sfu_out_15)
+
 	);
 
 
@@ -145,7 +180,7 @@ always @(posedge clk or posedge reset) begin
     end
 end
 
-always_comb begin
+always@ * begin
     // input [31:0] W_q, //from sram to lo
     W_addr		= 	{kij_count,3'b0} + count;
     W_cen 		=	!l0_wr_next;
@@ -236,10 +271,22 @@ always@ * begin
         ACT_L0_TO_ARRAY:
             if(count> 57)
             begin   // +2 over computation for reset of the state
-				next_state      = (kij_count == 8) ? SFU_COMPUTE : W_SRAM_TO_L0 ;
-				count_next 	    =  0;
-				weight_reset	=  0;
-                kij_count_next  = kij_count== 8 ? 8 : kij_count + 1;
+            		if (kij_count == 8) begin
+            			next_state = SFU_COMPUTE;
+            			kij_count_next = 8;
+            			count_next 	 =  0;
+				weight_reset	 =  0;
+            			end
+            		else begin
+            			next_state = W_SRAM_TO_L0;
+            			count_next 	 =  0;
+				weight_reset	 =  0;
+                		kij_count_next = kij_count +1;
+                	end
+//				next_state      = (kij_count == 8) ? SFU_COMPUTE : W_SRAM_TO_L0 ;
+//				count_next 	=  0;
+//				weight_reset	=  0;
+//                                kij_count_next  = (kij_count== 8) ? 8 : kij_count + 1;
             end
             else if(count>56)
             begin     //Asserting reset to Mac_array for 1 cycle to clear the weights
@@ -270,7 +317,7 @@ always@ * begin
             end
 
         SFU_COMPUTE:
-            if(count>143) 
+            if(count>72) 
             begin
                 next_state      = OUT_SRAM_FILL;
                 count_next    = 0;

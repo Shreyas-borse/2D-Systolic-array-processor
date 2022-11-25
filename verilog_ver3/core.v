@@ -28,9 +28,26 @@ module core
 // SRAM interface for PMEM and output_final (ie OP) 
     output [127:0] dut_OP_q,
     input  [127:0] dut_OP_d,
-    input  [8:0] dut_OP_addr,
+    input  [3:0] dut_OP_addr,
+
     input  dut_OP_cen,
-    input  dut_OP_wen
+    input  dut_OP_wen,
+    output 		[127:0] sfu_out_0,
+    output 		[127:0] sfu_out_1,
+    output 		[127:0] sfu_out_2,
+    output 		[127:0] sfu_out_3,
+    output 		[127:0] sfu_out_4,
+    output 		[127:0] sfu_out_5,
+    output 		[127:0] sfu_out_6,
+    output 		[127:0] sfu_out_7,
+    output 		[127:0] sfu_out_8,
+    output 		[127:0] sfu_out_9,
+    output 		[127:0] sfu_out_10,
+    output 		[127:0] sfu_out_11,
+    output 		[127:0] sfu_out_12,
+    output 		[127:0] sfu_out_13,
+    output 		[127:0] sfu_out_14,
+    output 		[127:0] sfu_out_15
 );
 
 parameter row = 8;
@@ -53,7 +70,7 @@ parameter col = 8;
 
     wire  [127:0] core_OP_q;
     wire  [127:0] core_OP_d;
-    wire  [8:0]   core_OP_addr;
+    wire  [3:0]   core_OP_addr;
     wire          core_OP_cen;
     wire          core_OP_wen;
 
@@ -72,7 +89,7 @@ parameter col = 8;
 
     wire  [127:0] mux_OP_q;
     wire  [127:0] mux_OP_d;
-    wire  [8:0]   mux_OP_addr;
+    wire  [3:0]   mux_OP_addr;
     wire          mux_OP_cen;
     wire          mux_OP_wen;
 
@@ -112,7 +129,7 @@ W_sram_72x32 u_sram_inst2(
     .A(mux_W_addr)
     );
 
-OP_sram_340x128 u_sram_inst3(
+OP_sram_16x128 u_sram_inst3(
     .CLK(clk),
     .D(mux_OP_d),
     .Q(dut_OP_q),
@@ -129,7 +146,6 @@ corelet #(.row(row), .col(col)) corelet_inst1
             
              .seq_begin(seq_begin), 
              .seq_done(seq_done),
-            
              .ACT_q(ACT_q),
              .ACT_addr(core_ACT_addr),
              .ACT_cen(core_ACT_cen),
@@ -142,7 +158,24 @@ corelet #(.row(row), .col(col)) corelet_inst1
              .OP_d(core_OP_d),
              .OP_addr(core_OP_addr),
              .OP_cen(core_OP_cen),
-             .OP_wen(core_OP_wen)
+             .OP_wen(core_OP_wen),
+             .sfu_out_0(sfu_out_0),
+             .sfu_out_1(sfu_out_1),
+             .sfu_out_2(sfu_out_2),
+             .sfu_out_3(sfu_out_3),
+             .sfu_out_4(sfu_out_4),
+             .sfu_out_5(sfu_out_5),
+             .sfu_out_6(sfu_out_6),
+             .sfu_out_7(sfu_out_7),
+             .sfu_out_8(sfu_out_8),
+             .sfu_out_9(sfu_out_9),
+             .sfu_out_10(sfu_out_10),
+             .sfu_out_11(sfu_out_11),
+             .sfu_out_12(sfu_out_12),
+             .sfu_out_13(sfu_out_13),
+             .sfu_out_14(sfu_out_14),
+             .sfu_out_15(sfu_out_15)
+
 );
 
 endmodule

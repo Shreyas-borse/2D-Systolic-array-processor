@@ -1,6 +1,6 @@
 // Created by prof. Mingu Kang @VVIP Lab in UCSD ECE department
 // Please do not spread this code without permission 
-module mac_row (clk, out_s, in_w, in_n, valid, inst_w, reset, debug_row_weight);
+module mac_row (clk, out_s, in_w, in_n, valid, inst_w, reset); //, debug_row_weight);
 
   parameter bw = 4;
   parameter psum_bw = 16;
@@ -13,7 +13,7 @@ module mac_row (clk, out_s, in_w, in_n, valid, inst_w, reset, debug_row_weight);
   input  [psum_bw*col-1:0] in_n;
   output [psum_bw*col-1:0] out_s;
   output [col-1:0] 	valid;
-  output logic [bw-1:0]	debug_row_weight[0:7];
+//  output logic [bw-1:0]	debug_row_weight[0:7];
 
   wire  [(col+1)*bw-1:0] temp;
   wire  [(col+1)*2-1:0] temp_inst;
@@ -33,8 +33,8 @@ module mac_row (clk, out_s, in_w, in_n, valid, inst_w, reset, debug_row_weight);
             .inst_w (temp_inst[2*i-1 : 2*(i-1)]),
             .inst_e (temp_inst[(2*(i+1))-1 : 2*i]),
             .in_n   (in_n[psum_bw*i-1 : psum_bw*(i-1)]),
-            .out_s  (out_s[psum_bw*i-1 : psum_bw*(i-1)]),
-			.debug_tile_weight (debug_row_weight[i-1])
+            .out_s  (out_s[psum_bw*i-1 : psum_bw*(i-1)])
+//			.debug_tile_weight (debug_row_weight[i-1])
         );
     
         assign valid[i-1] = temp_inst[2*(i+1)-1];
