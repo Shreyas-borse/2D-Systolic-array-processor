@@ -71,6 +71,14 @@ mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1
   .valid(array_valid_out),
   .debug_array_weight(debug_array_weight)  //connect to ofifo valid signal
 );
+logic [15:0] mac_out	[0:7];
+
+always_comb begin
+	for (int i=0 ; i< 8 ; i++) begin
+		mac_out[i] = ofifo_in[16*i+:16];
+	end
+end
+
 
 // logic [psum_bw*col - 1: 0] pmem_in;
 // logic [col-1 : 0] ofifo_wr;

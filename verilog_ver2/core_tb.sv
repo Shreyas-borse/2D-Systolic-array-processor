@@ -29,6 +29,7 @@ logic           TB_O_WEN;
 logic           TB_CL_SELECT;
 logic   [31:0]  D_2D [108:0];
 logic   [127:0] D_2D_128 [15:0];
+logic 	[15:0]  D_2D_128_array	[0:7] [0:15];
 
 integer w_file, w_scan_file ; // file_handler
 integer a_file, a_scan_file ; // file_handler
@@ -201,6 +202,9 @@ begin
         #10
         p_scan_file = $fscanf(p_file,"%128b", TB_O_D);
         D_2D_128[i][127:0] = TB_O_D;
+		for(int iter=0 ; iter<8 ; iter++) begin
+			D_2D_128_array[iter][i] = D_2D_128[i][16*iter+:16];
+		end
     end
     #10
     TB_ACT_CEN = 1;

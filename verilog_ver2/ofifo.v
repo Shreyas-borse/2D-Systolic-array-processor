@@ -30,7 +30,8 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
       fifo_depth64 #(.bw(psum_bw)) fifo_instance (
 	 .rd_clk(clk),
 	 .wr_clk(clk),
-	 .rd(rd_en),
+	 // .rd(rd_en),
+	 .rd(o_valid),
 	 .wr(wr[i]),
      .o_empty(empty[i]),
      .o_full(full[i]),
