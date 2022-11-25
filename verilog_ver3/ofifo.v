@@ -27,6 +27,7 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
   assign o_ready = !(|full) ;
   assign o_valid = &(~empty) ;
 
+  generate
   for (i=0; i<col ; i=i+1) begin : col_num
       fifo_depth16 #(.bw(psum_bw)) fifo_instance (
 	 .rd_clk(clk),
@@ -39,6 +40,7 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
 	 .out(out[(i+1)*psum_bw - 1:(i)*psum_bw]),
      .reset(reset));
   end
+  endgenerate
 
 
   assign rd_en = (reset)? 0:rd;

@@ -25,6 +25,7 @@ module mac_array (clk, reset, out_s, in_w, in_n, inst_w, valid); //, debug_array
     assign out_s = n_s_array[psum_bw*col*(row+1)-1 : psum_bw*col*row];
 
     genvar i;
+    generate
     for (i=1; i < row+1 ; i=i+1) begin : row_num
         mac_row #(.bw(bw), .psum_bw(psum_bw)) mac_row_instance (
             .clk    (clk),                                             //input                       
@@ -37,6 +38,7 @@ module mac_array (clk, reset, out_s, in_w, in_n, inst_w, valid); //, debug_array
 //	     .debug_row_weight (debug_array_weight[i-1])
         );
     end
+    endgenerate
 
     always @ (posedge clk) begin
         // inst_w flows to row0 to row7
