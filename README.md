@@ -21,7 +21,7 @@ vvp compiled
             |     |----> l0 (fifo 8x64)                                                                                                           
             |     |----> mac_array                                                                                                                  
             |     |          |--> mac_row                                                                                                           
-            |     |	 	               |-->mac_tile                                                                                                     
+            |     |               |-->mac_tile                                                                                                     
             |     |----> ofifo (8x8)                                                                                                                
             |     |----> SFU   (sfu_reg_banks)                                                                                                          
             |                                                                                                                                              
