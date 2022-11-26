@@ -12,7 +12,7 @@ run following commands on terminal
 
 iverilog -g2012 -o compiled -c
 
-; vvp compiled
+vvp compiled
 
 #### Design Hierarchy
 ```bash
