@@ -231,7 +231,7 @@ begin
     #100 START = 1;
     #100 START = 0;
 
-    #12500
+    #15000
     //Activation Load and check begins
 
 
@@ -293,8 +293,7 @@ begin
         end
         
     end
-    $display("  ");
-    #100
+    $display("  ");   #100
  
     $stop;
     $finish;
