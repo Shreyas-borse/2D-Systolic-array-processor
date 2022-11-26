@@ -170,12 +170,13 @@ begin
         dut_W_ADDR   = i;
         #5
         if (D_2D[i][31:0] == dut_W_Q)
-            $display("%2d-th read data is %h --- Data matched", i, dut_W_Q);
+            $display("%2d-th Weight read data is %h --- Data matched", i, dut_W_Q);
         else begin
-            $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, dut_W_Q, D_2D[i]);
+            $display("%2d-th Weight read data is %h, expected data is %h --- Data ERROR !!!", i, dut_W_Q, D_2D[i]);
             error = error+1;
         end
     end
+    $display("  ");
     //Weight Load and Check ends
 
     //Activation Load and check begins
@@ -215,13 +216,13 @@ begin
         dut_ACT_ADDR   = i;
         #5
         if (D_2D[72+i][31:0] == dut_ACT_Q)
-            $display("%2d-th read data is %h --- Data matched", i, dut_ACT_Q);
+            $display("%2d-th ACT read data is %h --- Data matched", i, dut_ACT_Q);
         else begin
-            $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, dut_ACT_Q, D_2D[72+i]);
+            $display("%2d-th ACT read data is %h, expected data is %h --- Data ERROR !!!", i, dut_ACT_Q, D_2D[72+i]);
             error = error+1;
         end
     end
-	
+    $display("  ");
     
     dut_CL_SELECT = 0;
     dut_ACT_WEN = 1;
@@ -285,14 +286,14 @@ begin
         dut_O_ADDR   = i;
         #5
         if (D_2D_128[i][127:0] == dut_O_Q)
-            $display("%2d-th read data from OP_SRAM is %h --- Data matched", i, dut_O_Q);
+            $display("%2d-th Output data from OP_SRAM is %h --- Data matched", i, dut_O_Q);
         else begin
-            $display("%2d-th read data from 0P_SRAM is %h, expected data is %h --- Data ERROR !!!", i, dut_O_Q, D_2D_128[i]);
+            $display("%2d-th Output data from 0P_SRAM is %h, expected data is %h --- Data ERROR !!!", i, dut_O_Q, D_2D_128[i]);
             error = error+1;
         end
-    
+        
     end
-
+    $display("  ");
     #100
  
     $stop;

@@ -1,129 +1,130 @@
 VCD info: dumpfile core_tb.vcd opened for output.
- 0-th read data is 424d0044 --- Data matched
- 1-th read data is 213bf511 --- Data matched
- 2-th read data is 02fedf11 --- Data matched
- 3-th read data is 21dec413 --- Data matched
- 4-th read data is 29299934 --- Data matched
- 5-th read data is 32ee0212 --- Data matched
- 6-th read data is 113f1111 --- Data matched
- 7-th read data is 21bf2322 --- Data matched
- 8-th read data is 220ccf13 --- Data matched
- 9-th read data is 400e0112 --- Data matched
-10-th read data is 10efa911 --- Data matched
-11-th read data is 30eecc13 --- Data matched
-12-th read data is 1a099912 --- Data matched
-13-th read data is 21eaff02 --- Data matched
-14-th read data is 11712e01 --- Data matched
-15-th read data is 11053611 --- Data matched
-16-th read data is 01d99d02 --- Data matched
-17-th read data is 5001e413 --- Data matched
-18-th read data is 3ff20011 --- Data matched
-19-th read data is 21c0d002 --- Data matched
-20-th read data is 1101ef02 --- Data matched
-21-th read data is 31fddd13 --- Data matched
-22-th read data is 21331212 --- Data matched
-23-th read data is 10f79e10 --- Data matched
-24-th read data is 423f3733 --- Data matched
-25-th read data is 4037f122 --- Data matched
-26-th read data is 1109cb10 --- Data matched
-27-th read data is 11efb211 --- Data matched
-28-th read data is 3a299934 --- Data matched
-29-th read data is 21f22e12 --- Data matched
-30-th read data is 214a9d12 --- Data matched
-31-th read data is 21bc3722 --- Data matched
-32-th read data is 11202713 --- Data matched
-33-th read data is 4fe70f22 --- Data matched
-34-th read data is 200c9912 --- Data matched
-35-th read data is 2051cd02 --- Data matched
-36-th read data is 19099922 --- Data matched
-37-th read data is 205e6b03 --- Data matched
-38-th read data is 2a7a9912 --- Data matched
-39-th read data is 21e25712 --- Data matched
-40-th read data is 001bc503 --- Data matched
-41-th read data is 40c71423 --- Data matched
-42-th read data is 3f2edd22 --- Data matched
-43-th read data is 10770203 --- Data matched
-44-th read data is 0000ff01 --- Data matched
-45-th read data is 30532913 --- Data matched
-46-th read data is 31010312 --- Data matched
-47-th read data is 11d6ed11 --- Data matched
-48-th read data is 327f4743 --- Data matched
-49-th read data is 3144dd33 --- Data matched
-50-th read data is 112ccb11 --- Data matched
-51-th read data is 11cf9321 --- Data matched
-52-th read data is 29199922 --- Data matched
-53-th read data is 21271723 --- Data matched
-54-th read data is 11219422 --- Data matched
-55-th read data is 126be122 --- Data matched
-56-th read data is 3000f723 --- Data matched
-57-th read data is 3014dc23 --- Data matched
-58-th read data is 102ca922 --- Data matched
-59-th read data is 203fb002 --- Data matched
-60-th read data is 19199922 --- Data matched
-61-th read data is 20705013 --- Data matched
-62-th read data is 30119912 --- Data matched
-63-th read data is 217ef022 --- Data matched
-64-th read data is 20e90213 --- Data matched
-65-th read data is 30050712 --- Data matched
-66-th read data is 202edf23 --- Data matched
-67-th read data is 3f751313 --- Data matched
-68-th read data is 00121110 --- Data matched
-69-th read data is 31733b13 --- Data matched
-70-th read data is 30030123 --- Data matched
-71-th read data is 127fac23 --- Data matched
- 0-th read data is 00000000 --- Data matched
- 1-th read data is 00000000 --- Data matched
- 2-th read data is 00000000 --- Data matched
- 3-th read data is 00000000 --- Data matched
- 4-th read data is 00000000 --- Data matched
- 5-th read data is 00000000 --- Data matched
- 6-th read data is 00000000 --- Data matched
- 7-th read data is 00082a00 --- Data matched
- 8-th read data is 000a3f00 --- Data matched
- 9-th read data is 000a0f00 --- Data matched
-10-th read data is 00060d00 --- Data matched
-11-th read data is 00000000 --- Data matched
-12-th read data is 00000000 --- Data matched
-13-th read data is 00045700 --- Data matched
-14-th read data is 00096400 --- Data matched
-15-th read data is 000d0200 --- Data matched
-16-th read data is 00090400 --- Data matched
-17-th read data is 00000000 --- Data matched
-18-th read data is 00000000 --- Data matched
-19-th read data is 00003200 --- Data matched
-20-th read data is 00053000 --- Data matched
-21-th read data is 000a0000 --- Data matched
-22-th read data is 00070000 --- Data matched
-23-th read data is 00000000 --- Data matched
-24-th read data is 00000000 --- Data matched
-25-th read data is 00030400 --- Data matched
-26-th read data is 00050200 --- Data matched
-27-th read data is 00050000 --- Data matched
-28-th read data is 00040300 --- Data matched
-29-th read data is 00000000 --- Data matched
-30-th read data is 00000000 --- Data matched
-31-th read data is 00000000 --- Data matched
-32-th read data is 00000000 --- Data matched
-33-th read data is 00000000 --- Data matched
-34-th read data is 00000000 --- Data matched
-35-th read data is 00000000 --- Data matched
- 0-th read data from OP_SRAM is 004c00e100000068000000000000001f --- Data matched
- 1-th read data from OP_SRAM is 00cc0136000000450000000000000083 --- Data matched
- 2-th read data from OP_SRAM is 00f601620000002b000000000000005c --- Data matched
- 3-th read data from OP_SRAM is 00d700b4000000000000001200000057 --- Data matched
- 4-th read data from OP_SRAM is 000000ac0000000000000000000000d3 --- Data matched
- 5-th read data from OP_SRAM is 00000133000000000000000000000180 --- Data matched
- 6-th read data from OP_SRAM is 000001860000000000000000000000e7 --- Data matched
- 7-th read data from OP_SRAM is 000000f6000000000000000f00000057 --- Data matched
- 8-th read data from OP_SRAM is 0000005300000000000000000003007c --- Data matched
- 9-th read data from OP_SRAM is 0000009e00000017000000010015011b --- Data matched
-10-th read data from OP_SRAM is 000000c4000000040000000000000095 --- Data matched
-11-th read data from OP_SRAM is 0000004a000000000000000000000003 --- Data matched
-12-th read data from OP_SRAM is 0000003d00000001000000000000005d --- Data matched
-13-th read data from OP_SRAM is 000000640000000d00000000000000ba --- Data matched
-14-th read data from OP_SRAM is 00000047000000000000000000000077 --- Data matched
-15-th read data from OP_SRAM is 00000000000000000000000000000022 --- Data matched
+ 0-th Weight read data is 424d0044 --- Data matched
+ 1-th Weight read data is 213bf511 --- Data matched
+ 2-th Weight read data is 02fedf11 --- Data matched
+ 3-th Weight read data is 21dec413 --- Data matched
+ 4-th Weight read data is 29299934 --- Data matched
+ 5-th Weight read data is 32ee0212 --- Data matched
+ 6-th Weight read data is 113f1111 --- Data matched
+ 7-th Weight read data is 21bf2322 --- Data matched
+ 8-th Weight read data is 220ccf13 --- Data matched
+ 9-th Weight read data is 400e0112 --- Data matched
+10-th Weight read data is 10efa911 --- Data matched
+11-th Weight read data is 30eecc13 --- Data matched
+12-th Weight read data is 1a099912 --- Data matched
+13-th Weight read data is 21eaff02 --- Data matched
+14-th Weight read data is 11712e01 --- Data matched
+15-th Weight read data is 11053611 --- Data matched
+16-th Weight read data is 01d99d02 --- Data matched
+17-th Weight read data is 5001e413 --- Data matched
+18-th Weight read data is 3ff20011 --- Data matched
+19-th Weight read data is 21c0d002 --- Data matched
+20-th Weight read data is 1101ef02 --- Data matched
+21-th Weight read data is 31fddd13 --- Data matched
+22-th Weight read data is 21331212 --- Data matched
+23-th Weight read data is 10f79e10 --- Data matched
+24-th Weight read data is 423f3733 --- Data matched
+25-th Weight read data is 4037f122 --- Data matched
+26-th Weight read data is 1109cb10 --- Data matched
+27-th Weight read data is 11efb211 --- Data matched
+28-th Weight read data is 3a299934 --- Data matched
+29-th Weight read data is 21f22e12 --- Data matched
+30-th Weight read data is 214a9d12 --- Data matched
+31-th Weight read data is 21bc3722 --- Data matched
+32-th Weight read data is 11202713 --- Data matched
+33-th Weight read data is 4fe70f22 --- Data matched
+34-th Weight read data is 200c9912 --- Data matched
+35-th Weight read data is 2051cd02 --- Data matched
+36-th Weight read data is 19099922 --- Data matched
+37-th Weight read data is 205e6b03 --- Data matched
+38-th Weight read data is 2a7a9912 --- Data matched
+39-th Weight read data is 21e25712 --- Data matched
+40-th Weight read data is 001bc503 --- Data matched
+41-th Weight read data is 40c71423 --- Data matched
+42-th Weight read data is 3f2edd22 --- Data matched
+43-th Weight read data is 10770203 --- Data matched
+44-th Weight read data is 0000ff01 --- Data matched
+45-th Weight read data is 30532913 --- Data matched
+46-th Weight read data is 31010312 --- Data matched
+47-th Weight read data is 11d6ed11 --- Data matched
+48-th Weight read data is 327f4743 --- Data matched
+49-th Weight read data is 3144dd33 --- Data matched
+50-th Weight read data is 112ccb11 --- Data matched
+51-th Weight read data is 11cf9321 --- Data matched
+52-th Weight read data is 29199922 --- Data matched
+53-th Weight read data is 21271723 --- Data matched
+54-th Weight read data is 11219422 --- Data matched
+55-th Weight read data is 126be122 --- Data matched
+56-th Weight read data is 3000f723 --- Data matched
+57-th Weight read data is 3014dc23 --- Data matched
+58-th Weight read data is 102ca922 --- Data matched
+59-th Weight read data is 203fb002 --- Data matched
+60-th Weight read data is 19199922 --- Data matched
+61-th Weight read data is 20705013 --- Data matched
+62-th Weight read data is 30119912 --- Data matched
+63-th Weight read data is 217ef022 --- Data matched
+64-th Weight read data is 20e90213 --- Data matched
+65-th Weight read data is 30050712 --- Data matched
+66-th Weight read data is 202edf23 --- Data matched
+67-th Weight read data is 3f751313 --- Data matched
+68-th Weight read data is 00121110 --- Data matched
+69-th Weight read data is 31733b13 --- Data matched
+70-th Weight read data is 30030123 --- Data matched
+71-th Weight read data is 127fac23 --- Data matched
+  
+ 0-th ACT read data is 00000000 --- Data matched
+ 1-th ACT read data is 00000000 --- Data matched
+ 2-th ACT read data is 00000000 --- Data matched
+ 3-th ACT read data is 00000000 --- Data matched
+ 4-th ACT read data is 00000000 --- Data matched
+ 5-th ACT read data is 00000000 --- Data matched
+ 6-th ACT read data is 00000000 --- Data matched
+ 7-th ACT read data is 00082a00 --- Data matched
+ 8-th ACT read data is 000a3f00 --- Data matched
+ 9-th ACT read data is 000a0f00 --- Data matched
+10-th ACT read data is 00060d00 --- Data matched
+11-th ACT read data is 00000000 --- Data matched
+12-th ACT read data is 00000000 --- Data matched
+13-th ACT read data is 00045700 --- Data matched
+14-th ACT read data is 00096400 --- Data matched
+15-th ACT read data is 000d0200 --- Data matched
+16-th ACT read data is 00090400 --- Data matched
+17-th ACT read data is 00000000 --- Data matched
+18-th ACT read data is 00000000 --- Data matched
+19-th ACT read data is 00003200 --- Data matched
+20-th ACT read data is 00053000 --- Data matched
+21-th ACT read data is 000a0000 --- Data matched
+22-th ACT read data is 00070000 --- Data matched
+23-th ACT read data is 00000000 --- Data matched
+24-th ACT read data is 00000000 --- Data matched
+25-th ACT read data is 00030400 --- Data matched
+26-th ACT read data is 00050200 --- Data matched
+27-th ACT read data is 00050000 --- Data matched
+28-th ACT read data is 00040300 --- Data matched
+29-th ACT read data is 00000000 --- Data matched
+30-th ACT read data is 00000000 --- Data matched
+31-th ACT read data is 00000000 --- Data matched
+32-th ACT read data is 00000000 --- Data matched
+33-th ACT read data is 00000000 --- Data matched
+34-th ACT read data is 00000000 --- Data matched
+35-th ACT read data is 00000000 --- Data matched
+  
+ 0-th Output data from OP_SRAM is 004c00e100000068000000000000001f --- Data matched
+ 1-th Output data from OP_SRAM is 00cc0136000000450000000000000083 --- Data matched
+ 2-th Output data from OP_SRAM is 00f601620000002b000000000000005c --- Data matched
+ 3-th Output data from OP_SRAM is 00d700b4000000000000001200000057 --- Data matched
+ 4-th Output data from OP_SRAM is 000000ac0000000000000000000000d3 --- Data matched
+ 5-th Output data from OP_SRAM is 00000133000000000000000000000180 --- Data matched
+ 6-th Output data from OP_SRAM is 000001860000000000000000000000e7 --- Data matched
+ 7-th Output data from OP_SRAM is 000000f6000000000000000f00000057 --- Data matched
+ 8-th Output data from OP_SRAM is 0000005300000000000000000003007c --- Data matched
+ 9-th Output data from OP_SRAM is 0000009e00000017000000010015011b --- Data matched
+10-th Output data from OP_SRAM is 000000c4000000040000000000000095 --- Data matched
+11-th Output data from OP_SRAM is 0000004a000000000000000000000003 --- Data matched
+12-th Output data from OP_SRAM is 0000003d00000001000000000000005d --- Data matched
+13-th Output data from OP_SRAM is 000000640000000d00000000000000ba --- Data matched
+14-th Output data from OP_SRAM is 00000047000000000000000000000077 --- Data matched
+15-th Output data from OP_SRAM is 00000000000000000000000000000022 --- Data matched
+  
 ** VVP Stop(0) **
 ** Flushing output streams.
-** Current simulation time is 15643 ticks.
-> 
