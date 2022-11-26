@@ -10,8 +10,9 @@ for design compilation and analysis ICARUS and gtkwave is been used.
 for running and generating .vcd file we need to go to respective folder:
 run following commands on terminal 
 
-iverilog -g2012 -o compiled -c 
-vvp compiled
+iverilog -g2012 -o compiled -c
+
+; vvp compiled
 
 #### Design Hierarchy
 ```bash
