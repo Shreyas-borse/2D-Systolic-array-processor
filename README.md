@@ -13,9 +13,9 @@ run following commands on terminal
 iverilog -g2012 -o compiled -c 
 vvp compiled
 
-### Design Hierarchy
+#### Design Hierarchy
 
--- CORE_TESTBENCH
+-- CORE_TESTBENCH                                                                                                                       
  |---> core
        |--> corelet
        |	|----> l0 (fifo 8x64)
