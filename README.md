@@ -16,16 +16,16 @@ vvp compiled
 #### Design Hierarchy
 
 |--> CORE_TESTBENCH                                                                                                                       
-      |---> core
-            |--> corelet
-            |	    |----> l0 (fifo 8x64)
-            |	    |----> mac_array
-            |	    |          |--> mac_row
-            |   	|	 	               |-->mac_tile
-            |	    |----> ofifo (8x8)
-            |	    |----> SFU   (sfu_reg_banks)
-            |      
-            |----> SFU Act_ sram (activation storage)
-            |----> SFU W_sram (for weights)
-            |----> SFU OP_sram (Final convoluted output after relu)
+      |---> core                                                                                                                                           
+            |--> corelet                                                                                                          
+            |	    |----> l0 (fifo 8x64)                                                                                                           
+            |	    |----> mac_array                                                                                                                  
+            |	    |          |--> mac_row                                                                                                           
+            |   	|	 	               |-->mac_tile                                                                                                     
+            |	    |----> ofifo (8x8)                                                                                                                
+            |	    |----> SFU   (sfu_reg_banks)                                                                                                          
+            |                                                                                                                                              
+            |----> SFU Act_ sram (activation storage)                                                                                                     
+            |----> SFU W_sram (for weights)                                                                                                               
+            |----> SFU OP_sram (Final convoluted output after relu)                                                                                   
       
