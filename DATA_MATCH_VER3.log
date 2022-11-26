@@ -141,3 +141,5 @@ VCD info: dumpfile core_tb.vcd opened for output.
 15-th read data from OP_SRAM is 00000000000000000000000000000022 --- Data matched
 ** VVP Stop(0) **
 ** Flushing output streams.
+** Current simulation time is 15643 ticks.
+> ** Continue **

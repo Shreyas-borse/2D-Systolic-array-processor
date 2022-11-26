@@ -6,25 +6,25 @@ logic CLK;
 logic RESET;
 
 
-logic   [31:0]  TB_ACT_D;
-wire    [31:0]  TB_ACT_Q;  //logic can't be connected to output port for some reason
-logic   [6:0]   TB_ACT_ADDR;
-logic           TB_ACT_CEN;
-logic           TB_ACT_WEN;
+logic   [31:0]  dut_ACT_D;
+wire    [31:0]  dut_ACT_Q;  //logic can't be connected to output port for some reason
+logic   [6:0]   dut_ACT_ADDR;
+logic           dut_ACT_CEN;
+logic           dut_ACT_WEN;
 
-logic   [31:0]  TB_W_D;
-wire    [31:0]  TB_W_Q;  //logic can't be connected to output port for some reason
-logic   [6:0]   TB_W_ADDR;
-logic           TB_W_CEN;
-logic           TB_W_WEN;
+logic   [31:0]  dut_W_D;
+wire    [31:0]  dut_W_Q;  //logic can't be connected to output port for some reason
+logic   [6:0]   dut_W_ADDR;
+logic           dut_W_CEN;
+logic           dut_W_WEN;
 
-logic   [127:0] TB_O_D;
-wire    [127:0] TB_O_Q;
-logic   [3:0]   TB_O_ADDR;
-logic           TB_O_CEN;
-logic           TB_O_WEN;
+logic   [127:0] dut_O_D;
+wire    [127:0] dut_O_Q;
+logic   [3:0]   dut_O_ADDR;
+logic           dut_O_CEN;
+logic           dut_O_WEN;
 
-logic           TB_CL_SELECT;
+logic           dut_CL_SELECT;
 logic   [31:0]  D_2D [108:0];
 logic   [127:0] D_2D_128 [15:0];
 logic   START;
@@ -83,25 +83,25 @@ core u_core(
     .seq_begin  (START),
     .seq_done	(SEQ_DONE),
 
-    .dut_ACT_addr  (TB_ACT_ADDR),
-    .dut_ACT_cen   (TB_ACT_CEN),
-    .dut_ACT_wen   (TB_ACT_WEN),
-    .dut_ACT_d     (TB_ACT_D),
-    .ACT_q         (TB_ACT_Q),
+    .dut_ACT_addr  (dut_ACT_ADDR),
+    .dut_ACT_cen   (dut_ACT_CEN),
+    .dut_ACT_wen   (dut_ACT_WEN),
+    .dut_ACT_d     (dut_ACT_D),
+    .ACT_q         (dut_ACT_Q),
 
-    .dut_W_addr  (TB_W_ADDR),
-    .dut_W_cen   (TB_W_CEN),
-    .dut_W_wen   (TB_W_WEN),
-    .dut_W_d     (TB_W_D),
-    .W_q         (TB_W_Q),
+    .dut_W_addr  (dut_W_ADDR),
+    .dut_W_cen   (dut_W_CEN),
+    .dut_W_wen   (dut_W_WEN),
+    .dut_W_d     (dut_W_D),
+    .W_q         (dut_W_Q),
 
-    .dut_OP_addr  (TB_O_ADDR),
-    .dut_OP_cen   (TB_O_CEN),
-    .dut_OP_wen   (TB_O_WEN),
-    .dut_OP_d     (TB_O_D),
-    .dut_OP_q     (TB_O_Q),
+    .dut_OP_addr  (dut_O_ADDR),
+    .dut_OP_cen   (dut_O_CEN),
+    .dut_OP_wen   (dut_O_WEN),
+    .dut_OP_d     (dut_O_D),
+    .dut_OP_q     (dut_O_Q),
 
-    .dut_cl_sel(TB_CL_SELECT),
+    .dut_cl_sel(dut_CL_SELECT),
     .sfu_done (SFU_DONE)
     //.sfu_out_0(sfu_out_0),
     //.sfu_out_1(sfu_out_1),
@@ -141,39 +141,39 @@ begin
 
     #101 RESET = 0;
     #10
-    TB_W_CEN = 0;
-    TB_W_WEN = 0;
-    TB_ACT_CEN = 1;
-    TB_ACT_WEN = 1;
+    dut_W_CEN = 0;
+    dut_W_WEN = 0;
+    dut_ACT_CEN = 1;
+    dut_ACT_WEN = 1;
 
-    TB_CL_SELECT = 1;
-    TB_O_WEN = 1;
-    TB_O_CEN = 1;
+    dut_CL_SELECT = 1;
+    dut_O_WEN = 1;
+    dut_O_CEN = 1;
 
     for (i=0; i<72 ; i=i+1)
     begin
         #10
-        TB_W_ADDR   = i;
-        w_scan_file = $fscanf(w_file,"%32b", TB_W_D);
-        D_2D[i][31:0] = TB_W_D;
+        dut_W_ADDR   = i;
+        w_scan_file = $fscanf(w_file,"%32b", dut_W_D);
+        D_2D[i][31:0] = dut_W_D;
     end
     #10
-    TB_W_CEN = 1;
-    TB_W_WEN = 1;
-    TB_CL_SELECT = 1;
-    TB_O_WEN = 1;
-    TB_O_CEN = 1;
+    dut_W_CEN = 1;
+    dut_W_WEN = 1;
+    dut_CL_SELECT = 1;
+    dut_O_WEN = 1;
+    dut_O_CEN = 1;
     for (i=0; i<72 ; i=i+1)
     begin
         #5
-        TB_W_CEN = 0;
-        TB_W_WEN = 1;
-        TB_W_ADDR   = i;
+        dut_W_CEN = 0;
+        dut_W_WEN = 1;
+        dut_W_ADDR   = i;
         #5
-        if (D_2D[i][31:0] == TB_W_Q)
-            $display("%2d-th read data is %h --- Data matched", i, TB_W_Q);
+        if (D_2D[i][31:0] == dut_W_Q)
+            $display("%2d-th read data is %h --- Data matched", i, dut_W_Q);
         else begin
-            $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, TB_W_Q, D_2D[i]);
+            $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, dut_W_Q, D_2D[i]);
             error = error+1;
         end
     end
@@ -190,44 +190,44 @@ begin
 
     #101 RESET = 0;
     #10
-    TB_ACT_CEN = 0;
-    TB_ACT_WEN = 0;
-    TB_CL_SELECT = 1;
-    TB_O_WEN = 1;
-    TB_O_CEN = 1;
+    dut_ACT_CEN = 0;
+    dut_ACT_WEN = 0;
+    dut_CL_SELECT = 1;
+    dut_O_WEN = 1;
+    dut_O_CEN = 1;
 
     for (i=0; i<36 ; i=i+1)
     begin
         #10
-        TB_ACT_ADDR   = i;
-        a_scan_file = $fscanf(a_file,"%32b", TB_ACT_D);
-        D_2D[72+i][31:0] = TB_ACT_D;
+        dut_ACT_ADDR   = i;
+        a_scan_file = $fscanf(a_file,"%32b", dut_ACT_D);
+        D_2D[72+i][31:0] = dut_ACT_D;
     end
     #10
-    TB_ACT_CEN = 1;
-    TB_ACT_WEN = 1;
-    TB_CL_SELECT = 1;
-    TB_O_WEN = 1;
-    TB_O_CEN = 1;
+    dut_ACT_CEN = 1;
+    dut_ACT_WEN = 1;
+    dut_CL_SELECT = 1;
+    dut_O_WEN = 1;
+    dut_O_CEN = 1;
     for (i=0; i<36 ; i=i+1)
     begin
         #5
-        TB_ACT_CEN = 0;
-        TB_ACT_WEN = 1;
-        TB_ACT_ADDR   = i;
+        dut_ACT_CEN = 0;
+        dut_ACT_WEN = 1;
+        dut_ACT_ADDR   = i;
         #5
-        if (D_2D[72+i][31:0] == TB_ACT_Q)
-            $display("%2d-th read data is %h --- Data matched", i, TB_ACT_Q);
+        if (D_2D[72+i][31:0] == dut_ACT_Q)
+            $display("%2d-th read data is %h --- Data matched", i, dut_ACT_Q);
         else begin
-            $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, TB_ACT_Q, D_2D[72+i]);
+            $display("%2d-th read data is %h, expected data is %h --- Data ERROR !!!", i, dut_ACT_Q, D_2D[72+i]);
             error = error+1;
         end
     end
 	
     
-    TB_CL_SELECT = 0;
-    TB_ACT_WEN = 1;
-    TB_ACT_CEN = 1;
+    dut_CL_SELECT = 0;
+    dut_ACT_WEN = 1;
+    dut_ACT_CEN = 1;
     
     #100 START = 1;
     #100 START = 0;
@@ -249,20 +249,20 @@ begin
 
     #101 RESET = 0;
     #10
-    TB_ACT_CEN = 1;
-    TB_ACT_WEN = 1;
-    TB_W_CEN = 1;
-    TB_W_WEN = 1;
-    TB_CL_SELECT = 1;
-    TB_O_WEN = 1;
-    TB_O_CEN = 1;
+    dut_ACT_CEN = 1;
+    dut_ACT_WEN = 1;
+    dut_W_CEN = 1;
+    dut_W_WEN = 1;
+    dut_CL_SELECT = 1;
+    dut_O_WEN = 1;
+    dut_O_CEN = 1;
                                                                                                              
     for (i=0; i<16 ; i=i+1)
     begin
         #10
-        p_scan_file = $fscanf(p_file,"%128b", TB_O_D);
-        //$display("%2d- pscan is %b --- Data matched", i,TB_O_D);
-        D_2D_128[i][127:0] = TB_O_D;
+        p_scan_file = $fscanf(p_file,"%128b", dut_O_D);
+        //$display("%2d- pscan is %b --- Data matched", i,dut_O_D);
+        D_2D_128[i][127:0] = dut_O_D;
     end
     ///****for SFU OUT CHECK *****//
     //for (i=0; i<16 ; i=i+1)
@@ -275,24 +275,24 @@ begin
     //	end
     //end 
     #10
-    TB_ACT_CEN = 1;
-    TB_ACT_WEN = 1;
-    TB_W_CEN = 1;
-    TB_W_WEN = 1;
-    TB_CL_SELECT = 1;
-    TB_O_WEN = 1;
-    TB_O_CEN = 1;
+    dut_ACT_CEN = 1;
+    dut_ACT_WEN = 1;
+    dut_W_CEN = 1;
+    dut_W_WEN = 1;
+    dut_CL_SELECT = 1;
+    dut_O_WEN = 1;
+    dut_O_CEN = 1;
     for (i=0; i<16 ; i=i+1)
     begin
         #5
-        TB_O_CEN = 0;
-        TB_O_WEN = 1;
-        TB_O_ADDR   = i;
+        dut_O_CEN = 0;
+        dut_O_WEN = 1;
+        dut_O_ADDR   = i;
         #5
-        if (D_2D_128[i][127:0] == TB_O_Q)
-            $display("%2d-th read data from OP_SRAM is %h --- Data matched", i, TB_O_Q);
+        if (D_2D_128[i][127:0] == dut_O_Q)
+            $display("%2d-th read data from OP_SRAM is %h --- Data matched", i, dut_O_Q);
         else begin
-            $display("%2d-th read data from 0P_SRAM is %h, expected data is %h --- Data ERROR !!!", i, TB_O_Q, D_2D_128[i]);
+            $display("%2d-th read data from 0P_SRAM is %h, expected data is %h --- Data ERROR !!!", i, dut_O_Q, D_2D_128[i]);
             error = error+1;
         end
     
