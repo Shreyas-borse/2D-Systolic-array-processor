@@ -2,7 +2,7 @@
 
 ### Implementation of one Conv2D layer of VGG / RESNET on a custom design hardware accelarator
 
-#### Compiling and design Hierarchy  
+#### Compiling 
   
 VGG and RESET have different implementation folder but same hardware,
 for design compilation and analysis ICARUS and gtkwave is been used.
@@ -13,7 +13,7 @@ run following commands on terminal
 iverilog -g2012 -o compiled -c 
 vvp compiled
 
-## Design Hierarchy
+### Design Hierarchy
 
 -- CORE_TESTBENCH
  |---> core
