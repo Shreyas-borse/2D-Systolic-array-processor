@@ -1,7 +1,6 @@
 # 2D-Systolic-array-processor-ISA
 
-### Implementation of one Conv2D layer of VGG / RESNET on 
-### custom design hardware accelator
+### Implementation of one Conv2D layer of VGG / RESNET on a custom design hardware accelator
 
 #### Compiling and design Hierarchy  
   
