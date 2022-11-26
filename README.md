@@ -18,12 +18,12 @@ vvp compiled
 |--> CORE_TESTBENCH                                                                                                                       
       |---> core                                                                                                                                           
             |--> corelet                                                                                                          
-            |	    |----> l0 (fifo 8x64)                                                                                                           
-            |	    |----> mac_array                                                                                                                  
-            |	    |          |--> mac_row                                                                                                           
-            |   	|	 	               |-->mac_tile                                                                                                     
-            |	    |----> ofifo (8x8)                                                                                                                
-            |	    |----> SFU   (sfu_reg_banks)                                                                                                          
+            |     |----> l0 (fifo 8x64)                                                                                                           
+            |     |----> mac_array                                                                                                                  
+            |     |          |--> mac_row                                                                                                           
+            |     |	 	               |-->mac_tile                                                                                                     
+            |     |----> ofifo (8x8)                                                                                                                
+            |     |----> SFU   (sfu_reg_banks)                                                                                                          
             |                                                                                                                                              
             |----> SFU Act_ sram (activation storage)                                                                                                     
             |----> SFU W_sram (for weights)                                                                                                               
