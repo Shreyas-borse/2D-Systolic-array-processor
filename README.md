@@ -14,7 +14,7 @@ iverilog -g2012 -o compiled -c
 vvp compiled
 
 #### Design Hierarchy
-
+```bash
 |--> CORE_TESTBENCH                                                                                                                       
       |---> core                                                                                                                                           
             |--> corelet                                                                                                          
@@ -29,10 +29,3 @@ vvp compiled
             |----> SFU W_sram (for weights)                                                                                                               
             |----> SFU OP_sram (Final convoluted output after relu)  
             
-           
-├── Core Testbench    
-│   ├── core          
-│   |    ├── corelet         
-│   └──                 
-└── 
-      
