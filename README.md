@@ -3,6 +3,7 @@
 ### Implementation of one Conv2D layer of VGG / RESNET on a custom design hardware accelarator
 
 VGG:
+
 	Normally Tested for 1 layer on VGG
 	8 Input Channel ---> 8 Output channel
 	Nij = 6x6 (Input dim) Kij=3x3(Kernel dim) Oij = 4x4(Output dim)
