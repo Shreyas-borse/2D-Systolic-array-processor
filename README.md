@@ -27,5 +27,12 @@ vvp compiled
             |                                                                                                                                              
             |----> SFU Act_ sram (activation storage)                                                                                                     
             |----> SFU W_sram (for weights)                                                                                                               
-            |----> SFU OP_sram (Final convoluted output after relu)                                                                                   
+            |----> SFU OP_sram (Final convoluted output after relu)  
+            
+           
+├── Core Testbench    
+│   ├── core          
+│   |    ├── corelet         
+│   └──                 
+└── 
       
