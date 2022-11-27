@@ -19,8 +19,9 @@ RESNET : (Extensively tested)
 	Each output is 4x4
 	total coumputing 64 outputs
 
-#### Compiling 
-  
+
+
+##### Compiling #####  
 VGG and RESET have different implementation folder but same hardware,
 for design compilation and analysis ICARUS and gtkwave is been used.
 
@@ -31,8 +32,8 @@ iverilog -g2012 -o compiled -c
 
 vvp compiled
 
-	    
-![architecture drawio(1)](https://user-images.githubusercontent.com/49656689/204113681-95d876b8-0594-4f49-888d-857f1a67fedc.png)
+![architecture_final drawio](https://user-images.githubusercontent.com/49656689/204154259-7c400550-ee41-4ef6-a553-0124e4bd446f.png)	    
+
 #### Design Hierarchy
 ```bash
 |--> CORE_TESTBENCH                                                                                                                       
