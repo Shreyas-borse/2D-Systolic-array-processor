@@ -16,4 +16,5 @@
 ../verilog/core.v
 ../verilog/corelet.sv
 ../verilog/SFU.sv
+../verilog/clock_gater.sv
 ./VGG_core_tb.sv

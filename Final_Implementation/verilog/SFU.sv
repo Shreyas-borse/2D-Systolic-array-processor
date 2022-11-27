@@ -39,6 +39,7 @@ logic [127:0] sfu_out_15_lm;
 
 logic [8:0] sfu_counter;
 logic [4:0] LUT_map [0:323];
+
 logic signed [15:0] sfu_reg_bank [0:7][0:15]; //This is where the final output will be after 324 valid signals
 
 logic [127:0] sfu_reg_store [0:15];
@@ -141,24 +142,6 @@ always@(posedge clk or posedge reset) begin
 	sfu_out_15_lm<= sfu_reg_store[15];
 	end
 end
-
-//assign sfu_out_0_lm = sfu_reg_store [0];
-//assign sfu_out_1_lm = sfu_reg_store [1];
-//assign sfu_out_2_lm = sfu_reg_store [2];
-//assign sfu_out_3_lm = sfu_reg_store [3];
-//assign sfu_out_4_lm = sfu_reg_store [4];
-//assign sfu_out_5_lm = sfu_reg_store [5];
-//assign sfu_out_6_lm = sfu_reg_store [6];
-//assign sfu_out_7_lm = sfu_reg_store [7];
-//assign sfu_out_8_lm = sfu_reg_store [8];
-//assign sfu_out_9_lm = sfu_reg_store [9];
-//assign sfu_out_10_lm = sfu_reg_store[10];
-//assign sfu_out_11_lm = sfu_reg_store[11];
-//assign sfu_out_12_lm = sfu_reg_store[12];
-//assign sfu_out_13_lm = sfu_reg_store[13];
-//assign sfu_out_14_lm = sfu_reg_store[14];
-//assign sfu_out_15_lm = sfu_reg_store[15];
-
 	
 // if value is 5'd16, then it should not be added
 assign LUT_map[0  ] =  5'd0  ;

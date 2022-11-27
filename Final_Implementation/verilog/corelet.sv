@@ -66,6 +66,9 @@ logic	[127:0] sfu_out_14;
 logic	[127:0] sfu_out_15;
 
 
+wire mac_clk_en;
+wire mac_clk;
+
 l0 #( .bw(bw), .row(8)) u_l0_inst1 (
         .clk(clk),
         .in(AW_q),
@@ -85,7 +88,7 @@ logic [1:0] inst_w, inst_w_next;
 
 mac_array #(.bw(bw), .psum_bw(psum_bw), .row(row), .col(col)) u_mac_array_inst1 
 (
-  .clk(clk),
+  .clk(mac_clk),
   .reset(reset || weight_reset),
   .out_s(ofifo_in),
   .in_w(l0_to_array), // inst[1]:execute, inst[0]: kernel loading
@@ -147,6 +150,16 @@ SFU u_SFU(
 
 	);
 
+
+//******mac_array_clock gating*********//
+
+assign mac_clk_en = ((next_state==W_L0_TO_ARRAY) || (next_state==ACT_L0_TO_ARRAY) || (present_state==W_L0_TO_ARRAY) || (present_state==ACT_L0_TO_ARRAY)); 
+
+clock_gater u_clock_gater_inst1(
+	.clk(clk),
+	.i_clk_en(mac_clk_en | reset),
+	.g_clk(mac_clk)
+);
 
 //typedef enum logic {IDLE, W_TO_L0, W_TO_ARRAY, A_TO_L0, A_TO_ARRAY, SFU_COMPUTE, OUT_SRAM_FILL } state_coding_t;
 enum logic [2:0] {IDLE, W_SRAM_TO_L0, W_L0_TO_ARRAY, ACT_SRAM_TO_L0, ACT_L0_TO_ARRAY, SFU_DONE_TO_OUTSRAM} present_state, next_state;
