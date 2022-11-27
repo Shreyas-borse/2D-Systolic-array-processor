@@ -123,6 +123,8 @@ logic [31: 0] a_arr_out [2303 : 0];
 logic [127:0] p_arr [1023: 0];
 logic [127:0] p_arr_out [1023: 0];
 
+logic [31:0] residue_arr [1155:0];
+
 initial 
 begin
 

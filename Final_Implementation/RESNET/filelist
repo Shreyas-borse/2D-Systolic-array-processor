@@ -15,6 +15,6 @@
 ../verilog/W_sram_72x32.v
 ../verilog/core.v
 ../verilog/corelet.sv
-../verilog/SFU.sv
+../verilog/SFU_RESNET.sv
 ../verilog/clock_gater.sv
 ./RESNET_core_tb.sv
