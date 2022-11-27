@@ -66,39 +66,40 @@ always@(posedge clk or posedge reset) begin
 end
  // relu
 
-always@ * begin
+/// always@ * begin
+always@(posedge clk) begin
 	for (int i = 0 ; i < 16; i=i+1) begin 
 		for (int j =0 ; j < 8 ; j=j+1) begin
 			if (sfu_reg_bank[j][i] < 0)
-				sfu_reg_store[i][16*j +: 16 ] = 0; // sfu_reg_bank[j][i];  //  16*j + 15 : 16*j 
+				sfu_reg_store[i][16*j +: 16 ] <= 0; // sfu_reg_bank[j][i];  //  16*j + 15 : 16*j 
 			else 
-				sfu_reg_store[i][16*j +: 16 ] = sfu_reg_bank[(j)][i];  //
+				sfu_reg_store[i][16*j +: 16 ] <= sfu_reg_bank[(j)][i];  //
 		end
 	end
 end
 
 
-
-always@ * begin
+//always@ * begin
+always@(posedge clk) begin
 	for (int i = 127 ; i >= 15 ; i = i -16) begin
 		//sfu_out_0 [(127 -i) + 15 : (127-i) ] = sfu_out_0_lm [ i : i-16 ]; 
 	
-		sfu_out_0 [(127 - i) +: 16 ] = sfu_out_0_lm [i-15 +: 16 ]; 
-		sfu_out_1 [ (127 - i) +: 16] = sfu_out_1_lm [i-15 +: 16 ]; 
-		sfu_out_2 [ (127 - i) +: 16] = sfu_out_2_lm [i-15 +: 16 ]; 
-		sfu_out_3 [ (127 - i) +: 16] = sfu_out_3_lm [i-15 +: 16 ]; 
-		sfu_out_4 [ (127 - i) +: 16] = sfu_out_4_lm [i-15 +: 16 ]; 
-		sfu_out_5 [ (127 - i) +: 16] = sfu_out_5_lm [i-15 +: 16 ]; 
-		sfu_out_6 [ (127 - i) +: 16] = sfu_out_6_lm [i-15 +: 16 ]; 
-		sfu_out_7 [ (127 - i) +: 16] = sfu_out_7_lm [i-15 +: 16 ]; 
-		sfu_out_8 [ (127 - i) +: 16] = sfu_out_8_lm [i-15 +: 16 ]; 
-		sfu_out_9 [ (127 - i) +: 16] = sfu_out_9_lm [i-15 +: 16 ]; 
-		sfu_out_10[ (127 - i) +: 16] = sfu_out_10_lm [ i-15 +: 16]; 
-		sfu_out_11[ (127 - i) +: 16] = sfu_out_11_lm [ i-15 +: 16]; 
-		sfu_out_12[ (127 - i) +: 16] = sfu_out_12_lm [ i-15 +: 16]; 
-		sfu_out_13[ (127 - i) +: 16] = sfu_out_13_lm [ i-15 +: 16]; 
-		sfu_out_14[ (127 - i) +: 16] = sfu_out_14_lm [ i-15 +: 16]; 
-		sfu_out_15[ (127 - i) +: 16] = sfu_out_15_lm [ i-15 +: 16]; 
+		sfu_out_0 [(127 - i) +: 16 ] <= sfu_out_0_lm [i-15 +: 16 ]; 
+		sfu_out_1 [ (127 - i) +: 16] <= sfu_out_1_lm [i-15 +: 16 ]; 
+		sfu_out_2 [ (127 - i) +: 16] <= sfu_out_2_lm [i-15 +: 16 ]; 
+		sfu_out_3 [ (127 - i) +: 16] <= sfu_out_3_lm [i-15 +: 16 ]; 
+		sfu_out_4 [ (127 - i) +: 16] <= sfu_out_4_lm [i-15 +: 16 ]; 
+		sfu_out_5 [ (127 - i) +: 16] <= sfu_out_5_lm [i-15 +: 16 ]; 
+		sfu_out_6 [ (127 - i) +: 16] <= sfu_out_6_lm [i-15 +: 16 ]; 
+		sfu_out_7 [ (127 - i) +: 16] <= sfu_out_7_lm [i-15 +: 16 ]; 
+		sfu_out_8 [ (127 - i) +: 16] <= sfu_out_8_lm [i-15 +: 16 ]; 
+		sfu_out_9 [ (127 - i) +: 16] <= sfu_out_9_lm [i-15 +: 16 ]; 
+		sfu_out_10[ (127 - i) +: 16] <= sfu_out_10_lm [ i-15 +: 16]; 
+		sfu_out_11[ (127 - i) +: 16] <= sfu_out_11_lm [ i-15 +: 16]; 
+		sfu_out_12[ (127 - i) +: 16] <= sfu_out_12_lm [ i-15 +: 16]; 
+		sfu_out_13[ (127 - i) +: 16] <= sfu_out_13_lm [ i-15 +: 16]; 
+		sfu_out_14[ (127 - i) +: 16] <= sfu_out_14_lm [ i-15 +: 16]; 
+		sfu_out_15[ (127 - i) +: 16] <= sfu_out_15_lm [ i-15 +: 16]; 
 	end	
 end
 
