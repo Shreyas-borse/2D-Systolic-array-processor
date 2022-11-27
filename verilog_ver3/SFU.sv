@@ -102,22 +102,63 @@ always@ * begin
 	end	
 end
 
-assign sfu_out_0_lm = sfu_reg_store [0];
-assign sfu_out_1_lm = sfu_reg_store [1];
-assign sfu_out_2_lm = sfu_reg_store [2];
-assign sfu_out_3_lm = sfu_reg_store [3];
-assign sfu_out_4_lm = sfu_reg_store [4];
-assign sfu_out_5_lm = sfu_reg_store [5];
-assign sfu_out_6_lm = sfu_reg_store [6];
-assign sfu_out_7_lm = sfu_reg_store [7];
-assign sfu_out_8_lm = sfu_reg_store [8];
-assign sfu_out_9_lm = sfu_reg_store [9];
-assign sfu_out_10_lm = sfu_reg_store[10];
-assign sfu_out_11_lm = sfu_reg_store[11];
-assign sfu_out_12_lm = sfu_reg_store[12];
-assign sfu_out_13_lm = sfu_reg_store[13];
-assign sfu_out_14_lm = sfu_reg_store[14];
-assign sfu_out_15_lm = sfu_reg_store[15];
+always@(posedge clk or posedge reset) begin
+	if(reset) begin
+
+	sfu_out_0_lm <= 0;
+ 	sfu_out_1_lm <= 0;
+ 	sfu_out_2_lm <= 0;
+ 	sfu_out_3_lm <= 0;
+ 	sfu_out_4_lm <= 0;
+ 	sfu_out_5_lm <= 0;
+ 	sfu_out_6_lm <= 0;
+ 	sfu_out_7_lm <= 0;
+ 	sfu_out_8_lm <= 0;
+ 	sfu_out_9_lm <= 0;
+	sfu_out_10_lm<= 0;
+	sfu_out_11_lm<= 0;
+	sfu_out_12_lm<= 0;
+	sfu_out_13_lm<= 0;
+	sfu_out_14_lm<= 0;
+	sfu_out_15_lm<= 0;
+	end
+	else begin
+	sfu_out_0_lm <= sfu_reg_store [0];
+ 	sfu_out_1_lm <= sfu_reg_store [1];
+ 	sfu_out_2_lm <= sfu_reg_store [2];
+ 	sfu_out_3_lm <= sfu_reg_store [3];
+ 	sfu_out_4_lm <= sfu_reg_store [4];
+ 	sfu_out_5_lm <= sfu_reg_store [5];
+ 	sfu_out_6_lm <= sfu_reg_store [6];
+ 	sfu_out_7_lm <= sfu_reg_store [7];
+ 	sfu_out_8_lm <= sfu_reg_store [8];
+ 	sfu_out_9_lm <= sfu_reg_store [9];
+	sfu_out_10_lm<= sfu_reg_store[10];
+	sfu_out_11_lm<= sfu_reg_store[11];
+	sfu_out_12_lm<= sfu_reg_store[12];
+	sfu_out_13_lm<= sfu_reg_store[13];
+	sfu_out_14_lm<= sfu_reg_store[14];
+	sfu_out_15_lm<= sfu_reg_store[15];
+	end
+end
+
+//assign	sfu_out_0_lm <= sfu_reg_store [0];
+//assign 	sfu_out_1_lm <= sfu_reg_store [1];
+//assign 	sfu_out_2_lm <= sfu_reg_store [2];
+//assign 	sfu_out_3_lm <= sfu_reg_store [3];
+//assign 	sfu_out_4_lm <= sfu_reg_store [4];
+//assign 	sfu_out_5_lm <= sfu_reg_store [5];
+//assign 	sfu_out_6_lm <= sfu_reg_store [6];
+//assign 	sfu_out_7_lm <= sfu_reg_store [7];
+//assign 	sfu_out_8_lm <= sfu_reg_store [8];
+//assign 	sfu_out_9_lm <= sfu_reg_store [9];
+//assign	sfu_out_10_lm<= sfu_reg_store[10];
+//assign	sfu_out_11_lm<= sfu_reg_store[11];
+//assign	sfu_out_12_lm<= sfu_reg_store[12];
+//assign	sfu_out_13_lm<= sfu_reg_store[13];
+//assign	sfu_out_14_lm<= sfu_reg_store[14];
+//assign	sfu_out_15_lm<= sfu_reg_store[15];
+
 
 	
 // if value is 5'd16, then it should not be added

@@ -127,7 +127,7 @@ begin
     RESET = 1;
     START = 0;
   
-    w_file = $fopen("weight_project.txt", "r");
+    w_file = $fopen("./verilog_ver3/weight_project.txt", "r");
 
     // Following three lines are to remove the first three comment lines of the file
     w_scan_file = $fscanf(w_file,"%s", captured_data);
@@ -176,7 +176,7 @@ begin
 
     //Activation Load and check begins
 
-    a_file = $fopen("activation_project.txt", "r");
+    a_file = $fopen("./verilog_ver3/activation_project.txt", "r");
 
     // Following three lines are to remove the first three comment lines of the file
     a_scan_file = $fscanf(a_file,"%s", captured_data);
@@ -235,7 +235,7 @@ begin
 
     
 
-    p_file = $fopen("output_project.txt", "r");
+    p_file = $fopen("./verilog_ver3/output_project.txt", "r");
 
     // Following three lines are to remove the first three comment lines of the file
     p_scan_file = $fscanf(p_file,"%s", captured_data);
