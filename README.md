@@ -31,6 +31,8 @@ iverilog -g2012 -o compiled -c
 
 vvp compiled
 
+	    
+![architecture drawio(1)](https://user-images.githubusercontent.com/49656689/204113681-95d876b8-0594-4f49-888d-857f1a67fedc.png)
 #### Design Hierarchy
 ```bash
 |--> CORE_TESTBENCH                                                                                                                       
@@ -47,6 +49,5 @@ vvp compiled
             |----> SFU W_sram (for weights)                                                                                                               
             |----> SFU OP_sram (Final convoluted output after relu)  
             
-	    
-	    
-![architecture drawio(1)](https://user-images.githubusercontent.com/49656689/204113659-863f4c46-ea2a-46b3-9361-504521d0b899.png)
+
+
