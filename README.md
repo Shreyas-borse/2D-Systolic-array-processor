@@ -49,7 +49,8 @@ RESNET: Python .ipynb will dump the below .txt files
   
   Copy these files from the python folder into the RESNET folder and do the testing.
 
-![architecture_final drawio](https://user-images.githubusercontent.com/49656689/204154259-7c400550-ee41-4ef6-a553-0124e4bd446f.png)	    
+![image(1)](https://user-images.githubusercontent.com/49656689/204258508-30438d3a-9441-471a-8f2c-4bea0822a05a.png)
+
 
 #### Design Hierarchy
 ```bash
