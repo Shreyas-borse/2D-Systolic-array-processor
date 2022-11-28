@@ -11,13 +11,13 @@ VGG:
 
 RESNET : (Extensively tested)
 
-	64 ITERATIONS (as there are 64 Tiles)
+	64 ITERATIONS (as there are 64 groups of 6*6 -> 4*4)
 	8 Input channels ---> 8 Output channel
 
 	Nij = 34X34  Oij = 32X32 
 	64 Tiles (6x6) 
 	Each output is 4x4
-	total coumputing 64 outputs
+	total verifying 1024 outputs
 
 
 
@@ -31,6 +31,23 @@ run following commands on terminal
 iverilog -g2012 -o compiled -c
 
 vvp compiled
+
+### Special notes about testing the design
+VGG: Python .ipynb will dump the below .txt files
+     - activation_project.txt (contains activations)
+     - output_project.txt (conatins final output after accumulation + relu)
+     - psum_project.txt (contains final accumulation values)
+     - weight_project.txt (conatins weights)
+Copy these files from the python folder into the VGG folder and do the testing
+
+RESNET: Python .ipynb will dump the below .txt files
+      - Resnet_activation_project.txt (contains activations)
+      - Resnet_output_project.txt (contains final output after accumulation + residual addition + relu)
+      - Resnet_psum_project.txt (contains final accumulation values before residual addition)
+      - Resnet_residual_project.txt (contains residual values to be added to the psum in the testbench)
+      - Resnet_weight_project.txt (contains final weight values)
+  
+  Copy these files from the python folder into the RESNET folder and do the testing.
 
 ![architecture_final drawio](https://user-images.githubusercontent.com/49656689/204154259-7c400550-ee41-4ef6-a553-0124e4bd446f.png)	    
 
