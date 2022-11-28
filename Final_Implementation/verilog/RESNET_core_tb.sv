@@ -30,6 +30,8 @@ logic   START;
 integer w_file, w_scan_file ; // file_handler
 integer a_file, a_scan_file ; // file_handler
 integer p_file, p_scan_file ; // file_handler
+integer r_file, r_scan_file ; // file_handler
+
 
 integer act_count = 0;
 integer out_count = 0;
@@ -38,6 +40,10 @@ integer captured_data;
 integer error;
 logic SEQ_DONE;
 
+// Residual
+
+logic [127:0] dut_O_Q_store;
+ ////////
 
 //logic [127:0]  sfu_out_tot [15:0]; 
 logic SFU_DONE;
@@ -108,6 +114,10 @@ core u_core(
 integer wline = 0;
 logic [31:0] aline;
 logic [127:0] pline;
+/// Residual
+logic [31:0] rline;
+
+/////////
 integer a_rows = 0;
 integer p_rows = 0;
 
@@ -122,6 +132,10 @@ logic [31: 0] a_arr [1155 : 0];
 logic [31: 0] a_arr_out [2303 : 0];
 logic [127:0] p_arr [1023: 0];
 logic [127:0] p_arr_out [1023: 0];
+// Residual
+logic [31:0] residual_arr [1023 : 0];
+logic [31:0] residual_arr_out [1023 : 0];
+/////////
 
 initial 
 begin
@@ -152,6 +166,22 @@ begin
 	end
     $fclose(p_file);
 
+
+////////////////////////////////
+// For residual values /////////
+////////////////////////////////
+     r_file = $fopen("Resnet_residual_project.txt", "r");
+     r_scan_file = $fscanf(r_file,"%s", captured_data);
+     r_scan_file = $fscanf(r_file,"%s", captured_data);
+     r_scan_file = $fscanf(r_file,"%s", captured_data);
+     for (int a = 0 ; a < 1023 ; a = a + 1) begin
+    	r_scan_file = $fscanf(r_file,"%32b", rline);
+	    residual_arr [a] = rline;
+//    	$display("r_array = %32b", residual_arr[a]) ; 
+	end
+    $fclose(r_file);
+
+
      for (v = 0 ; v < 953; v = v + 136)
         begin
     		for (h = v; h < v+34; h = h + 4 )
@@ -177,12 +207,15 @@ begin
 			begin
 		      		for (hhh = 0; hhh < 4; hhh = hhh + 1) begin
 					p_arr_out [out_count] = p_arr [hh+hhh];
+                    // for residual
+                    residual_arr_out [out_count] = residual_arr [out_count];
 					out_count = out_count +1;
 //    					$display("p_arr _location %11d", (hh+hhh)); 
 				end
 			end
 		end
 	end
+
 
 
     CLK   = 0;
@@ -346,8 +379,15 @@ $display("  ");
         dut_O_WEN = 1;
         dut_O_ADDR   = i;
         #15
-        if (D_2D_128[i][127:0] == dut_O_Q)
-            $display("%2d-th read data from OP_SRAM is %h --- Data matched", i, dut_O_Q);
+        dut_O_Q_store = dut_O_Q + residual_arr_out[i];
+        if (dut_O_Q_store < 0)
+        begin
+        dut_O_Q_store = 0;
+        end
+       
+        // Add dut_O_q + residual_arr_out and then relu
+        if (D_2D_128[i][127:0] == dut_O_Q_store)
+            $display("%2d-th read data from OP_SRAM is %h --- Data matched", i, dut_O_Q_store);
         else begin
             $display("%2d-th read data from 0P_SRAM is %h, expected data is %h --- Data ERROR !!!", i, dut_O_Q, D_2D_128[i]);
             error = error+1;
