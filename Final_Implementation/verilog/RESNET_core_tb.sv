@@ -42,7 +42,7 @@ logic SEQ_DONE;
 
 // Residual
 
-logic [127:0] dut_O_Q_store;
+logic signed [127:0] dut_O_Q_store;
  ////////
 
 //logic [127:0]  sfu_out_tot [15:0]; 
@@ -133,9 +133,12 @@ logic [31: 0] a_arr_out [2303 : 0];
 logic [127:0] p_arr [1023: 0];
 logic [127:0] p_arr_out [1023: 0];
 // Residual
-logic [31:0] residual_arr [1023 : 0];
-logic [31:0] residual_arr_out [1023 : 0];
-/////////
+logic signed [31:0]  residual_arr [1023 : 0];
+logic signed [31:0]  residual_arr_out [1023 : 0];
+
+
+integer ap = 0;
+integer jj =0;
 
 initial 
 begin
@@ -198,7 +201,6 @@ begin
     			end
     		end
         end
-
      for (v = 0 ; v < 897; v = v + 128)
     	begin
 		for (h = v; h < v+32; h = h + 4)
@@ -208,9 +210,10 @@ begin
 		      		for (hhh = 0; hhh < 4; hhh = hhh + 1) begin
 					p_arr_out [out_count] = p_arr [hh+hhh];
                     // for residual
-                    residual_arr_out [out_count] = residual_arr [out_count];
+                    residual_arr_out [out_count] = residual_arr [hh+hhh];
+//    					$display("r_arr _location %11d", (hh+hhh));
+//					$display("r_array = %32b", residual_arr_out[out_count]) ;
 					out_count = out_count +1;
-//    					$display("p_arr _location %11d", (hh+hhh)); 
 				end
 			end
 		end
@@ -271,13 +274,12 @@ begin
 //Weight Load and Check ends
 
 /// REPEAT 64 TIMES  FOR RESNET ///
-
-for ( l = 0 ; l<64 ; l=l+1)
+for ( l = 0 ; l<64; l=l+1)
 begin		    	
 
     #100 RESET = 1;
     #50 RESET = 0;
-$display("*********  ___ITERATION %4d of RESNET 64___     *********", l);
+$display("***********  ITERATION %4d of 63 RESNET    *************", l);
 $display("  ");
      
     #10
@@ -286,7 +288,6 @@ $display("  ");
     dut_CL_SELECT = 1;
     dut_O_WEN = 1;
     dut_O_CEN = 1;
-    
     for (i=0; i<36 ; i=i+1)
     begin
         #10
@@ -348,7 +349,6 @@ $display("  ");
         //p_scan_file = $fscanf(p_file,"%128b", dut_O_D);
         D_2D_128[i][127:0] = dut_O_D;
     end
-    k = k + 16; 
 
 ///********************ignore : for debug ********************//
     ///****for SFU OUT CHECK *****//
@@ -363,7 +363,7 @@ $display("  ");
     //end 
 /////****************************************************///
 
-    #10
+    #5
     dut_ACT_CEN = 1;
     dut_ACT_WEN = 1;
     dut_W_CEN = 1;
@@ -379,21 +379,30 @@ $display("  ");
         dut_O_WEN = 1;
         dut_O_ADDR   = i;
         #15
-        dut_O_Q_store = dut_O_Q + residual_arr_out[i];
-        if (dut_O_Q_store < 0)
-        begin
-        dut_O_Q_store = 0;
-        end
-       
+        
+	for(jj =0 ; jj<8 ; jj = jj+1)
+	begin
+	#10
+//        $display("rrr_array_%5d = %d",jj, (residual_arr_out[i][4*jj +: 4])) ; 
+	dut_O_Q_store [16*jj +: 16 ]  = $signed( dut_O_Q  [16*jj +: 16 ]) +  ({{12{1'b0}},residual_arr_out [k+i][(4*jj) +: 4]});  
+//        $display("dut_o_q_store_%5d = %5d",jj, $signed(dut_O_Q_store [16*jj +: 16 ])) ;
+		if ($signed(dut_O_Q_store [16*jj +: 16]) <0) 
+			dut_O_Q_store [16*jj +: 16] = 0;
+	end
+
+
+        #10
         // Add dut_O_q + residual_arr_out and then relu
         if (D_2D_128[i][127:0] == dut_O_Q_store)
             $display("%2d-th read data from OP_SRAM is %h --- Data matched", i, dut_O_Q_store);
         else begin
-            $display("%2d-th read data from 0P_SRAM is %h, expected data is %h --- Data ERROR !!!", i, dut_O_Q, D_2D_128[i]);
+            $display("%2d-th read data from 0P_SRAM is %h, expected data is %h --- Data ERROR !!!", i, dut_O_Q_store, D_2D_128[i]);
             error = error+1;
         end
     end
     $display("  ");
+
+    k = k + 16; 
 end
     #100
  
